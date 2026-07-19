@@ -1,0 +1,17 @@
+/build/
+/cmake-build-debug/
+/out/
+
+/.idea/
+/.vs/
+/*.user
+/CMakeSettings.json
+/compiler-id.cpp
+
+*.exe
+*.dll
+*.so
+*.dylib
+*.pdb
+*.obj
+*.o
