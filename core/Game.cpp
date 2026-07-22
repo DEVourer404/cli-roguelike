@@ -3,9 +3,7 @@
 
 
 Game::Game(): running(true) {
-    player_ = std::make_unique<Player>("player", 10, 'P');
-    current_level_ = std::make_unique<Level>("Dungeon floor", 1);
-    player_->get_entity_pos() =  dungeon_generator_.generate(current_level_->get_level_map());
+
 }
 
 void Game::main_menu() {
@@ -32,6 +30,9 @@ void Game::main_menu() {
             case 1:
                 in_menu = false;
                 system("CLS");
+                player_ = std::make_unique<Player>("player", 10, 'P');
+                current_level_ = std::make_unique<Level>("Dungeon floor", 1);
+                player_->get_entity_pos() =  dungeon_generator_.generate(current_level_->get_level_map());
                 run();
                 break;
             case 2:

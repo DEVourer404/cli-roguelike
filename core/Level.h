@@ -3,6 +3,9 @@
 
 #include <string>
 #include "Map.h"
+#include <vector>
+#include "../entities/Enemy.h"
+#include <memory>
 
 class Level {
 public:
@@ -18,6 +21,8 @@ public:
     char get_tile(int x, int y) const;
 
     bool is_walkable(const Vec2& vec2) const;
+
+    std::vector<std::unique_ptr<Enemy>> enemies;
 private:
     std::string level_name_;
     int level_num_;

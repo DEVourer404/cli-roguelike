@@ -2,7 +2,12 @@
 
 
 Level::Level(const std::string& level_name, int level_num):
-level_name_(level_name), level_num_(level_num)  {}
+level_name_(level_name), level_num_(level_num) {
+
+    enemies.push_back(std::make_unique<Enemy>("goblin", 10, 3, 'g'));
+    enemies.push_back(std::make_unique<Enemy>("goblin", 10, 3, 'g'));
+    enemies.push_back(std::make_unique<Enemy>("goblin", 10, 3, 'g'));
+}
 
 
 Map& Level::get_level_map() {
