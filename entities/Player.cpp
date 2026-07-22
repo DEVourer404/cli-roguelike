@@ -2,8 +2,8 @@
 #include <conio.h>
 #include "../systems/DungeonGenerator.h"
 
-Player::Player(const std::string& name, int health, char entity_symbol):
-Entity(name, health, entity_symbol) {}
+Player::Player(const std::string& name, int health, char player_symbol):
+Entity(name, health, 10, player_symbol) {}
 
 char get_key() {
     int key = _getch();

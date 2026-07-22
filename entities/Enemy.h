@@ -3,13 +3,13 @@
 
 #include <string>
 
-class Enemy {
-private:
-    std::string name;
+#include "Entity.h"
 
-    int health;
+class Enemy: public Entity {
+private:
+
 public:
-    Enemy();
+    Enemy(const std::string& name, int health, int damage, char enemy_symbol);
 };
 
 

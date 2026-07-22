@@ -8,7 +8,7 @@
 class Player: public Entity{
 private:
 public:
-    Player(const std::string& name, int health, char entity_symbol);
+    Player(const std::string& name, int health, char player_symbol);
 
     void handle_movement( Map& game_map);
 };
