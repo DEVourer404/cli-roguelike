@@ -9,7 +9,7 @@ class Renderer {
 public:
     Renderer();
 
-    void print(Level& current_level, Player& player) const;
+    void print(const Level& current_level, Player& player,  const std::vector<std::unique_ptr<Enemy>>& enemies) const;
 private:
 };
 

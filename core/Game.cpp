@@ -3,6 +3,7 @@
 
 
 Game::Game(): running(true) {
+    player_ = std::make_unique<Player>("player", 10, 'P');
 
 }
 
@@ -30,9 +31,9 @@ void Game::main_menu() {
             case 1:
                 in_menu = false;
                 system("CLS");
-                player_ = std::make_unique<Player>("player", 10, 'P');
                 current_level_ = std::make_unique<Level>("Dungeon floor", 1);
                 player_->get_entity_pos() =  dungeon_generator_.generate(current_level_->get_level_map());
+                current_level_->spawn_enemies(player_->get_entity_pos());
                 run();
                 break;
             case 2:
@@ -64,8 +65,8 @@ void Game::main_menu() {
 
 void Game::run() {
     while (running) {
-        renderer_.print(*current_level_, *player_);
-        player_->handle_movement(current_level_->get_level_map());
+        renderer_.print(*current_level_, *player_, current_level_->enemies);
+        player_->handle_movement(current_level_->get_level_map(), current_level_->enemies);
         move_to_new_level();
         system ("CLS");
     }
@@ -73,10 +74,10 @@ void Game::run() {
 
 void Game::move_to_new_level() {
     if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>') {
-        //current_level_->get_level_map().fill_map();
-
-        current_level_ = std::make_unique<Level>("Dung", current_level_->get_level_num()+1);
-
+        current_level_ = std::make_unique<Level>("Dungeon floor", current_level_->get_level_num()+1);
         player_->get_entity_pos() = dungeon_generator_.generate(current_level_->get_level_map());
+        current_level_->spawn_enemies(player_->get_entity_pos());
     }
 }
+
+

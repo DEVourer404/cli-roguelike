@@ -18,9 +18,12 @@ public:
     const Map::GameMapType& get_map_grid() const;
 
     void set_tile(int x, int y, char tile);
+    void set_tile(const Vec2& pos, char tile);
     char get_tile(int x, int y) const;
-
+    char get_tile(const Vec2& pos) const;
     bool is_walkable(const Vec2& vec2) const;
+
+    void spawn_enemies(const Vec2& player_pos);
 
     std::vector<std::unique_ptr<Enemy>> enemies;
 private:
