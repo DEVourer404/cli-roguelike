@@ -12,8 +12,16 @@ void Map::set_tile(int x, int y, char tile) {
     game_map_[y][x] = tile;
 }
 
+void Map::set_tile(const Vec2 &pos, char tile) {
+    game_map_[pos.y][pos.x] = tile;
+}
+
 char Map::get_tile(int x, int y) const {
     return game_map_[y][x];
+}
+
+char Map::get_tile(const Vec2 &pos) const {
+    return game_map_[pos.y][pos.x];
 }
 
 void Map::fill_map() {
@@ -33,3 +41,5 @@ bool Map::is_walkable(const Vec2& vec2) const{
     else
         return true;
 }
+
+

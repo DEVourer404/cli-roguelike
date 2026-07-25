@@ -15,11 +15,16 @@ public:
     const GameMapType& get_game_map() const;
 
     void set_tile(int x, int y, char tile);
+    void set_tile(const Vec2& pos, char tile);
     char get_tile(int x, int y) const;
+    char get_tile(const Vec2& pos) const;
+
 
     void fill_map();
 
     bool is_walkable(const Vec2& vec2) const;
+
+
 private:
 
 

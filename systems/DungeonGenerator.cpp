@@ -21,7 +21,7 @@ Vec2 DungeonGenerator::generate(Map& game_map) {
 
     int floorCount = 1;
 
-    game_map.set_tile(startX, startY, 'S');
+    //game_map.set_tile(startX, startY, 'S');
 
     while ((floorCount*100)/(Map::WIDTH*Map::HEIGHT) < 50) {
         // momentum - 70% szans na utrzymanie tego same kierunku
@@ -65,5 +65,6 @@ void DungeonGenerator::place_exit(Map &game_map) {
         exit_Y = Rng::generate_random_number(1, Map::HEIGHT-2);
     }
 }
+
 
 
