@@ -1,6 +1,6 @@
 #include "Player.h"
 #include <conio.h>
-
+#include "../entities/Enemy.h"
 
 #include "../systems/DungeonGenerator.h"
 
@@ -24,7 +24,7 @@ char get_key() {
     return 0;
 }
 
-void Player::handle_movement(Map& game_map, const std::vector<std::unique_ptr<Enemy>>& enemies) {
+void Player::take_turn(Map& game_map, const std::vector<std::unique_ptr<Enemy>>& enemies) {
     char k = get_key();
     Vec2 new_pos = get_entity_pos();
 
@@ -42,4 +42,19 @@ void Player::handle_movement(Map& game_map, const std::vector<std::unique_ptr<En
         }
         get_entity_pos() = new_pos;
     }
+}
+
+Vec2 Player::move_player(Map& game_map) {
+    char k = get_key();
+    Vec2 new_pos = get_entity_pos();
+
+    if (k == 'W') new_pos.y-=1;
+    if (k == 'S') new_pos.y+=1;
+    if (k == 'A') new_pos.x-=1;
+    if (k == 'D') new_pos.x+=1;
+
+    if(game_map.is_walkable(new_pos))
+        return new_pos;
+    else
+        return get_entity_pos();
 }

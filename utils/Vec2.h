@@ -11,6 +11,10 @@ struct Vec2 {
         return (x == other.x && y == other.y);
     }
 
+    bool operator!=(const Vec2& other) const {
+        return !(*this == other);
+    }
+
     Vec2& operator=(const Vec2& other) {
         if(this != &other) {
             x = other.x;

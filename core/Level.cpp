@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "../entities/Enemy.h"
 #include "../utils/Rng.h"
 #include "../utils/Vec2.h"
 

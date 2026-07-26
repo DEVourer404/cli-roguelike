@@ -10,6 +10,8 @@ public:
     Renderer();
 
     void print(const Level& current_level, Player& player,  const std::vector<std::unique_ptr<Enemy>>& enemies) const;
+
+    void print_player_stas(Player& player) const;
 private:
 };
 

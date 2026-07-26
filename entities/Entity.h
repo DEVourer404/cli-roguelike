@@ -30,7 +30,6 @@ public:
 
     void set_damage(int value);
     void set_max_health(int value);
-
 };
 
 

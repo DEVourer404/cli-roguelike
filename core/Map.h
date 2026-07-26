@@ -24,10 +24,7 @@ public:
 
     bool is_walkable(const Vec2& vec2) const;
 
-
 private:
-
-
     std::array<std::array<char, WIDTH>, HEIGHT> game_map_{};
 };
 

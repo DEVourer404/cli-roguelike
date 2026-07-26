@@ -1,6 +1,6 @@
 #include "Renderer.h"
 
-Renderer::Renderer() {}
+Renderer::Renderer() = default;
 
 void Renderer::print(const Level& current_level, Player& player,  const std::vector<std::unique_ptr<Enemy>>& enemies) const {
     auto temp_map = current_level.get_map_grid();
@@ -19,4 +19,14 @@ void Renderer::print(const Level& current_level, Player& player,  const std::vec
         }
         std::cout << "\n";
     }
+    print_player_stas(player);
 }
+
+void Renderer::print_player_stas(Player &player) const {
+    std::cout << "\n";
+    std::cout << "PLAYER STATS: \n";
+    std::cout << "Health: " << player.get_current_health() << "/" << player.get_max_health() << "\n";
+    std::cout << "Damage: " << player.get_damage() << "\n";
+
+}
+

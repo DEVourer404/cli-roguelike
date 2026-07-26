@@ -1,10 +1,8 @@
 #include "Game.h"
 #include <limits>
 
-
-Game::Game(): running(true) {
-    player_ = std::make_unique<Player>("player", 10, 'P');
-
+Game::Game(): is_running_(true) {
+    player_ = std::make_unique<Player>("player", 100, 'P');
 }
 
 void Game::main_menu() {
@@ -64,20 +62,22 @@ void Game::main_menu() {
 }
 
 void Game::run() {
-    while (running) {
+    GameState state = GameState::PLAYER_TURN;
+    while (is_running_) {
+        system("CLS");
         renderer_.print(*current_level_, *player_, current_level_->enemies);
-        player_->handle_movement(current_level_->get_level_map(), current_level_->enemies);
-        move_to_new_level();
-        system ("CLS");
+
     }
 }
 
-void Game::move_to_new_level() {
+GameState Game::move_to_new_level() {
     if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>') {
         current_level_ = std::make_unique<Level>("Dungeon floor", current_level_->get_level_num()+1);
         player_->get_entity_pos() = dungeon_generator_.generate(current_level_->get_level_map());
         current_level_->spawn_enemies(player_->get_entity_pos());
+        return GameState::PLAYER_TURN;
     }
+    return GameState::VICTORY;
 }
 
 
