@@ -21,4 +21,6 @@ add_executable(CLI_Roguelike main.cpp
         Entities/Enemy.cpp
         Entities/Enemy.h
         core/Level.cpp
-        core/Level.h)
+        core/Level.h
+        core/Combat.cpp
+        core/Combat.h)
