@@ -26,6 +26,8 @@ public:
     int get_current_health() const;
     int get_damage() const;
 
+    const std::string& get_name() const;
+
     void modify_health(int value);
 
     void set_damage(int value);

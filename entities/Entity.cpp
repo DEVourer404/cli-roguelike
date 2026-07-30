@@ -31,6 +31,11 @@ int Entity::get_damage() const {
     return damage_;
 }
 
+const std::string& Entity::get_name() const {
+    return name_;
+}
+
+
 void Entity::modify_health(int value)  {
     current_health_ += value;
     if(current_health_< 0) current_health_ = 0;

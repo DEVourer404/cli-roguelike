@@ -9,8 +9,8 @@ level_name_(level_name), level_num_(level_num) {
     enemies.push_back(std::make_unique<Enemy>("goblin1", 10, 3, 'g'));
     enemies.push_back(std::make_unique<Enemy>("goblin2", 10, 3, 'g'));
     enemies.push_back(std::make_unique<Enemy>("goblin3", 10, 3, 'g'));
-}
 
+}
 
 Map& Level::get_level_map() {
     return level_map_;

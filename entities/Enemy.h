@@ -13,9 +13,6 @@ private:
 
 public:
     Enemy(const std::string& name, int health, int damage, char enemy_symbol);
-
-    void take_turn(Entity& player, const const Map& game_map);
-
     Vec2 find_path_to_player(const Vec2& player_pos, const Map& game_map);
 };
 

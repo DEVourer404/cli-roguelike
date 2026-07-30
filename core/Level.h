@@ -9,7 +9,7 @@
 
 class Level {
 public:
-    Level(const std::string& level_name, int level_num);
+    Level(const std::string& level_name, int level_num = 0);
 
     Map& get_level_map();
     int get_level_num() const { return level_num_;}

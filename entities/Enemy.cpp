@@ -2,17 +2,6 @@
 
 Enemy::Enemy(const std::string &name, int health, int damage, char enemy_symbol): Entity(name, health, damage, enemy_symbol) {}
 
-void Enemy::take_turn(Entity& player, const Map& game_map) {
-    Vec2 new_pos = find_path_to_player(player.get_entity_pos(), game_map);
-
-    if(new_pos == player.get_entity_pos()) {
-        player.modify_health(-get_damage());
-    }
-    else {
-        get_entity_pos()=new_pos;
-    }
-}
-
 Vec2 Enemy::find_path_to_player(const Vec2 &player_pos, const Map& game_map) {
     std::array<std::array<bool, Map::WIDTH>, Map::HEIGHT> visited{};
     std::queue<Vec2> queue;

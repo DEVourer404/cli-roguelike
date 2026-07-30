@@ -26,15 +26,14 @@ void Game::main_menu() {
         }
 
         switch (choice) {
-            case 1:
+            case 1: {
                 in_menu = false;
                 system("CLS");
-                current_level_ = std::make_unique<Level>("Dungeon floor", 1);
-                player_->get_entity_pos() =  dungeon_generator_.generate(current_level_->get_level_map());
-                current_level_->spawn_enemies(player_->get_entity_pos());
+                init_level();
                 run();
                 break;
-            case 2:
+            }
+            case 2: {
                 system("CLS");
                 std::cout << "================================================\n";
                 std::cout << "              CONTROLS & HELP                   \n";
@@ -51,10 +50,12 @@ void Game::main_menu() {
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cin.get();
                 break;
-            case 3:
+            }
+            case 3: {
                 std::cout << "Thank you for playing!\n";
                 in_menu = false;
                 break;
+            }
             default:
                 break;
         }
@@ -62,22 +63,40 @@ void Game::main_menu() {
 }
 
 void Game::run() {
-    GameState state = GameState::PLAYER_TURN;
     while (is_running_) {
         system("CLS");
         renderer_.print(*current_level_, *player_, current_level_->enemies);
+        renderer_.print_current_text(current_combat_->current_entity_turn_text_);
 
+        combat_result_ = current_combat_->combat_loop(*player_, current_level_->enemies, current_level_->get_level_map());
+        switch (combat_result_) {
+            case CombatResult::CONTINUE: {
+                move_to_new_level();
+                break;
+            }
+            case CombatResult::GAME_OVER:
+                is_running_ = false;
+                break;
+            case CombatResult::WAIT_INPUT: {
+                renderer_.wait_for_enter();
+                break;
+            }
+        }
     }
 }
 
-GameState Game::move_to_new_level() {
-    if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>') {
-        current_level_ = std::make_unique<Level>("Dungeon floor", current_level_->get_level_num()+1);
-        player_->get_entity_pos() = dungeon_generator_.generate(current_level_->get_level_map());
-        current_level_->spawn_enemies(player_->get_entity_pos());
-        return GameState::PLAYER_TURN;
+void Game::move_to_new_level() {
+    if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->enemies.empty()) {
+        init_level();
     }
-    return GameState::VICTORY;
 }
 
+void Game::init_level() {
+    int level_num = current_level_ ? current_level_->get_level_num()+1 : 1;
+
+    current_level_ = std::make_unique<Level>("Dungeon floor", level_num);
+    player_->get_entity_pos() = dungeon_generator_.generate(current_level_->get_level_map());
+    current_level_->spawn_enemies(player_->get_entity_pos());
+    current_combat_ = std::make_unique<Combat>();
+}
 

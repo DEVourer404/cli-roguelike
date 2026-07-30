@@ -5,22 +5,29 @@
 #include "../entities/Enemy.h"
 #include "../utils/Vec2.h"
 
-enum class GameState {
-    PLAYER_TURN,
-    ENEMY_TURN,
+
+enum class CombatResult {
+    CONTINUE,
     GAME_OVER,
-    VICTORY
+    WAIT_INPUT
+};
+
+enum class TurnPhase {
+    PLAYER,
+    ENEMY
 };
 
 class Combat {
 private:
-    GameState current_state_;
+    TurnPhase current_phase_;
+    int current_enemy_index_;
 
     void player_turn(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies, Map& game_map);
     void enemy_turn(Enemy& enemy, Player& player, Map& game_map);
 public:
+    std::string current_entity_turn_text_;
     Combat();
-    void combat_loop(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies, Map& game_map, bool& is_running);
+    CombatResult combat_loop(Player& player, std::vector<std::unique_ptr<Enemy>>& enemies, Map& game_map);
 };
 
 

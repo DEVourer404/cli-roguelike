@@ -19,14 +19,22 @@ void Renderer::print(const Level& current_level, Player& player,  const std::vec
         }
         std::cout << "\n";
     }
-    print_player_stas(player);
+    print_player_stats(player);
 }
 
-void Renderer::print_player_stas(Player &player) const {
+void Renderer::print_player_stats(Player &player) const {
     std::cout << "\n";
-    std::cout << "PLAYER STATS: \n";
-    std::cout << "Health: " << player.get_current_health() << "/" << player.get_max_health() << "\n";
-    std::cout << "Damage: " << player.get_damage() << "\n";
-
+    std::cout << "HP: " << player.get_current_health() << "/" << player.get_max_health() << " | ";
+    std::cout << "DMG: " << player.get_damage() << " | ";
+    std::cout << "Lvl: " << 0 << " XP: " << 50 << "\n";
 }
 
+void Renderer::wait_for_enter() const {
+    std::cout << "Nacisnij Enter...";
+    _getch();
+}
+
+void Renderer::print_current_text(const std::string& current_turn_text) {
+    std::cout << current_turn_text << "\n";
+
+}
