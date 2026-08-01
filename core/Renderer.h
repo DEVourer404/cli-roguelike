@@ -13,6 +13,8 @@ public:
     void print_player_stats(Player& player) const;
     void wait_for_enter() const;
     void print_current_text(const std::string& current_turn_text);
+
+    void print_player_level_up(Player& player);
 };
 
 #endif //RENDERER_H

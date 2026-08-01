@@ -55,7 +55,14 @@ void Combat::player_turn(Player& player, std::vector<std::unique_ptr<Enemy>>& en
     }
 
     if (attacked_enemy) {
-        std::erase_if(enemies, [](auto& enemy){return !enemy->isAlive();});
+        std::erase_if(enemies, [&player](auto& enemy) {
+            if(!enemy->isAlive()) {
+                player.add_xp(enemy->get_given_xp());
+                return true;
+            }
+
+            return false;
+        });
     }
     else {
         player.get_entity_pos() = new_pos;

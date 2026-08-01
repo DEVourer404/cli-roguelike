@@ -1,6 +1,10 @@
 #include "Enemy.h"
 
-Enemy::Enemy(const std::string &name, int health, int damage, char enemy_symbol): Entity(name, health, damage, enemy_symbol) {}
+Enemy::Enemy(const std::string &name, int health, int damage, char enemy_symbol, int given_xp):
+Entity(name, enemy_symbol), max_health_(health), damage_(damage), given_xp_(given_xp) {
+    current_health_ = max_health_;
+}
+
 
 Vec2 Enemy::find_path_to_player(const Vec2 &player_pos, const Map& game_map) {
     std::array<std::array<bool, Map::WIDTH>, Map::HEIGHT> visited{};
@@ -53,3 +57,13 @@ Vec2 Enemy::find_path_to_player(const Vec2 &player_pos, const Map& game_map) {
 
     return current;
 }
+
+int Enemy::get_max_health() const {
+    return max_health_;
+}
+
+int Enemy::get_damage() const {
+    return damage_;
+}
+
+int Enemy::get_given_xp() const { return given_xp_; }

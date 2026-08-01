@@ -26,15 +26,41 @@ void Renderer::print_player_stats(Player &player) const {
     std::cout << "\n";
     std::cout << "HP: " << player.get_current_health() << "/" << player.get_max_health() << " | ";
     std::cout << "DMG: " << player.get_damage() << " | ";
-    std::cout << "Lvl: " << 0 << " XP: " << 50 << "\n";
+    std::cout << "Lvl: " << player.get_level() << " XP: " << player.get_current_xp() << "/" << player.get_xp_to_next_level() << "\n";
 }
 
 void Renderer::wait_for_enter() const {
     std::cout << "Nacisnij Enter...";
-    _getch();
+    int key = _getch();
+    if (key == 224 || key == 0) {
+        _getch();
+    }
 }
 
 void Renderer::print_current_text(const std::string& current_turn_text) {
     std::cout << current_turn_text << "\n";
 
 }
+
+void Renderer::print_player_level_up(Player& player) {
+    if(player.gained_levels > 0 ) {
+        while (player.gained_levels > 0) {
+            system("CLS");
+            std::cout << "You have gained another level! \n";
+            std::cout << "Choose which stats you want to upgrade! \n";
+
+            std::cout << "1. Strength (increase your damage) \n"
+                         "2. Dexterity (increase dodge chance) \n"
+                         "3. Constitution (increase your health) \n" ;
+
+            std::cout << "Your choice: ";
+            int choice;
+            std::cin >> choice;
+
+            player.level_up(choice);
+            player.gained_levels--;
+        }
+    }
+
+}
+

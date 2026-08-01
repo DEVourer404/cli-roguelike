@@ -2,7 +2,7 @@
 #include <limits>
 
 Game::Game(): is_running_(true) {
-    player_ = std::make_unique<Player>("player", 100, 'P');
+    player_ = std::make_unique<Player>("player", 'P');
 }
 
 void Game::main_menu() {
@@ -87,6 +87,7 @@ void Game::run() {
 
 void Game::move_to_new_level() {
     if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->enemies.empty()) {
+        renderer_.print_player_level_up(*player_);
         init_level();
     }
 }
