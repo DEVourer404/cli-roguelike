@@ -23,4 +23,12 @@ add_executable(CLI_Roguelike main.cpp
         core/Level.cpp
         core/Level.h
         core/Combat.cpp
-        core/Combat.h)
+        core/Combat.h
+        items/Item.cpp
+        items/Item.h
+        items/Weapon.cpp
+        items/Weapon.h
+        items/Armor.cpp
+        items/Armor.h
+        items/Consumable.cpp
+        items/Consumable.h)
