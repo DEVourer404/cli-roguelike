@@ -9,6 +9,8 @@ private:
 public:
     Weapon(std::string id, std::string name, int damage);
 
+    std::unique_ptr<Item> clone() const override;
+
     int get_damage() const;
 };
 

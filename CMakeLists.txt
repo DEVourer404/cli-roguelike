@@ -33,8 +33,4 @@ add_executable(CLI_Roguelike main.cpp
         items/Consumable.cpp
         items/Consumable.h
         data/JsonLoader.cpp
-        data/JsonLoader.h
-        data/EnemiesDatabase.cpp
-        data/EnemiesDatabase.h
-        data/ItemsDatabase.cpp
-        data/ItemsDatabase.h)
+        data/JsonLoader.h)

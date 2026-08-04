@@ -9,7 +9,7 @@
 
 class Level {
 public:
-    Level(const std::string& level_name, int level_num = 0);
+    Level(const std::string& level_name, const std::vector<Enemy> &enemies_templates, int level_num = 0);
 
     Map& get_level_map();
     int get_level_num() const { return level_num_;}
@@ -25,7 +25,7 @@ public:
 
     void spawn_enemies(const Vec2& player_pos);
 
-    std::vector<std::unique_ptr<Enemy>> enemies;
+    std::vector<Enemy> enemies;
 private:
     std::string level_name_;
     int level_num_;

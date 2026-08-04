@@ -10,6 +10,8 @@ private:
 public:
     Consumable(std::string id, std::string name, int amount);
 
+    std::unique_ptr<Item> clone() const override;
+
     int get_amount() const;
 };
 

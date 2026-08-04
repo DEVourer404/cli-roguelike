@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Goblin",
+    "health": 10,
+    "damage": 3,
+    "symbol": "g",
+    "given_xp": 50
+  },
+  {
+    "name": "Orc",
+    "health": 25,
+    "damage": 7,
+    "symbol": "o",
+    "given_xp": 100
+  },
+  {
+    "name": "Skeleton",
+    "health": 15,
+    "damage": 5,
+    "symbol": "s",
+    "given_xp": 75
+  }
+]

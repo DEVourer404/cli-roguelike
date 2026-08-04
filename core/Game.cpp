@@ -3,6 +3,12 @@
 
 Game::Game(): is_running_(true) {
     player_ = std::make_unique<Player>("player", 'P');
+
+    JsonLoader json_loader;
+    enemy_templates_ = json_loader.load_enemies();
+    item_templates_ = json_loader.load_items();
+
+    combat_result_ = CombatResult::CONTINUE;
 }
 
 void Game::main_menu() {
@@ -95,7 +101,7 @@ void Game::move_to_new_level() {
 void Game::init_level() {
     int level_num = current_level_ ? current_level_->get_level_num()+1 : 1;
 
-    current_level_ = std::make_unique<Level>("Dungeon floor", level_num);
+    current_level_ = std::make_unique<Level>("Dungeon floor", enemy_templates_, level_num);
     player_->get_entity_pos() = dungeon_generator_.generate(current_level_->get_level_map());
     current_level_->spawn_enemies(player_->get_entity_pos());
     current_combat_ = std::make_unique<Combat>();

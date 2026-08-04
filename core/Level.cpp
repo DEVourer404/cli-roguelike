@@ -3,12 +3,14 @@
 #include "../utils/Rng.h"
 #include "../utils/Vec2.h"
 
-Level::Level(const std::string& level_name, int level_num):
+Level::Level(const std::string& level_name, const std::vector<Enemy> &enemies_templates, int level_num):
 level_name_(level_name), level_num_(level_num) {
 
-    enemies.push_back(std::make_unique<Enemy>("goblin1", 10, 3, 'g', 50));
-    enemies.push_back(std::make_unique<Enemy>("goblin2", 10, 3, 'g', 50));
-    enemies.push_back(std::make_unique<Enemy>("goblin3", 10, 3, 'g', 50));
+    if (!enemies_templates.empty()) {
+        enemies.push_back(enemies_templates[0]);
+        enemies.push_back(enemies_templates[0]);
+        enemies.push_back(enemies_templates[0]);
+    }
 
 }
 
@@ -29,7 +31,7 @@ void Level::spawn_enemies(const Vec2& player_pos) {
 
     while (enemies_counter < enemies.size()) {
         if (get_tile(temp_pos.x, temp_pos.y) == '.' && temp_pos != player_pos) {
-            enemies[enemies_counter]->get_entity_pos() = temp_pos;
+            enemies[enemies_counter].get_entity_pos() = temp_pos;
             enemies_counter++;
         }
         temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);

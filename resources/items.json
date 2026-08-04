@@ -1,0 +1,20 @@
+[
+  {
+    "id": "iron_sword",
+    "name": "Iron Sword",
+    "type": "weapon",
+    "damage": 5
+  },
+  {
+    "id": "leather_armor",
+    "name": "Leather Armor",
+    "type": "armor",
+    "armor_rate": 3
+  },
+  {
+    "id": "health_potion",
+    "name": "Health Potion",
+    "type": "consumable",
+    "amount": 20
+  }
+]
