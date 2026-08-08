@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 
+#include "../items/Item.h"
+
 //class Enemy;
 
 struct Stats {
@@ -20,15 +22,17 @@ private:
     int current_xp_;
     int xp_to_next_level;
 
+    std::vector<std::unique_ptr<Item>> inventory_items_;
 
 public:
     Player(const std::string& name, char player_symbol);
-    Vec2 move_player(Map& game_map);
+    Vec2 move_player(Map& game_map, char k);
 
     Stats stats_;
 
     int gained_levels;
 
+    char get_key();
     int get_level() const;
     void level_up(int choice);
     int get_current_xp() const;
@@ -38,6 +42,10 @@ public:
 
     int get_max_health() const override;
     int get_damage() const override;
+
+    void add_to_inventory(const Item* item);
+    void remove_from_inventory();
+    const std::vector<std::unique_ptr<Item>>& get_inventory_items() const;
 };
 
 

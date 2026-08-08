@@ -42,25 +42,56 @@ void Renderer::print_current_text(const std::string& current_turn_text) {
 
 }
 
-void Renderer::print_player_level_up(Player& player) {
-    if(player.gained_levels > 0 ) {
-        while (player.gained_levels > 0) {
-            system("CLS");
-            std::cout << "You have gained another level! \n";
-            std::cout << "Choose which stats you want to upgrade! \n";
+int Renderer::print_player_level_up(const Player& player) {
+    system("CLS");
+    std::cout << "You have gained another level! \n";
+    std::cout << "Choose which stats you want to upgrade! \n";
+    std::cout << "Current stats: STR: " << player.stats_.strength << " | DEX: " << player.stats_.dexterity << " | CON: " << player.stats_.constitution << "\n\n";
 
-            std::cout << "1. Strength (increase your damage) \n"
-                         "2. Dexterity (increase dodge chance) \n"
-                         "3. Constitution (increase your health) \n" ;
 
-            std::cout << "Your choice: ";
-            int choice;
-            std::cin >> choice;
-
-            player.level_up(choice);
-            player.gained_levels--;
-        }
-    }
-
+    std::cout << "1. Strength (increase your damage) \n"
+                 "2. Dexterity (increase dodge chance) \n"
+                 "3. Constitution (increase your health) \n" ;
+    std::cout << "Your choice: ";
+    int choice;
+    std::cin >> choice;
+    return choice;
 }
 
+int Renderer::show_inventory(const Player &player) {
+    const auto& items = player.get_inventory_items();
+
+    while (true) {
+        system("cls");
+        std::cout << "========================================\n";
+        std::cout << "             YOUR INVENTORY             \n";
+        std::cout << "========================================\n";
+
+        if (items.empty()) {
+            std::cout << "  (Inventory is empty)\n";
+        } else {
+            for (size_t i = 0; i < items.size(); ++i) {
+                std::cout << "  [" << i + 1 << "] " << items[i]->get_name() << "\n";
+            }
+        }
+
+        std::cout << "========================================\n";
+        std::cout << " [1-" << items.size() << "] Use item | [Q / ESC] Return to game\n";
+        std::cout << "Choose option: ";
+
+        int choice = _getch();
+
+        if (choice == 224 || choice == 0) {
+            _getch();
+            continue;
+        }
+
+        if (choice == 'q' || choice == 'Q' || choice == 27) {
+            return -1;
+        }
+
+        if (!items.empty() && choice >= '1' && choice <= '0' + static_cast<int>(items.size())) {
+            return choice - '1';
+        }
+    }
+}

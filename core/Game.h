@@ -18,7 +18,7 @@ public:
 
 private:
     void run();
-    void move_to_new_level();
+    void move_to_new_level(const Player& player);
     void init_level();
 
     Renderer renderer_;

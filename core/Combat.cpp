@@ -1,16 +1,15 @@
 #include "Combat.h"
 
-
 Combat::Combat() {
     current_phase_ = TurnPhase::PLAYER;
     current_enemy_index_ = 0;
     current_entity_turn_text_ = "=== YOUR TURN ===";
 }
 
-CombatResult Combat::combat_loop(Player& player, std::vector<Enemy>& enemies, Map& game_map) {
+CombatResult Combat::combat_loop(Player& player, std::vector<Enemy>& enemies, Level& current_level, Renderer& renderer) {
     switch (current_phase_) {
         case TurnPhase::PLAYER: {
-            player_turn(player, enemies, game_map);
+            player_turn(player, enemies, current_level, renderer);
 
             if (!enemies.empty()) {
                 current_phase_ = TurnPhase::ENEMY;
@@ -21,7 +20,7 @@ CombatResult Combat::combat_loop(Player& player, std::vector<Enemy>& enemies, Ma
             return CombatResult::CONTINUE;
         }
         case TurnPhase::ENEMY: {
-            enemy_turn(enemies[current_enemy_index_], player, game_map);
+            enemy_turn(enemies[current_enemy_index_], player, current_level.get_level_map());
 
             if (!player.isAlive())
                 return CombatResult::GAME_OVER;
@@ -42,30 +41,53 @@ CombatResult Combat::combat_loop(Player& player, std::vector<Enemy>& enemies, Ma
     return CombatResult::CONTINUE;
 }
 
-void Combat::player_turn(Player& player, std::vector<Enemy>& enemies, Map& game_map) {
-    Vec2 new_pos  = player.move_player(game_map);
+void Combat::player_turn(Player& player, std::vector<Enemy>& enemies, Level& current_level, Renderer& renderer) {
+    bool turn_ended = false;
 
-    bool attacked_enemy = false;
+    while (!turn_ended) {
+        char key = player.get_key();
 
-    for (auto& enemy: enemies) {
-        if (new_pos == enemy.get_entity_pos() && enemy.isAlive()) {
-            enemy.modify_health(-player.get_damage());
-            attacked_enemy = true;
+        if (key == 'I') {
+            int item_index = renderer.show_inventory(player);
+            if (item_index >= 0) {
+                // player.use_item(item_index);
+                turn_ended = true;
+            } else {
+                system("cls");
+                renderer.print(current_level, player, enemies);
+                renderer.print_current_text(current_entity_turn_text_);
+            }
         }
-    }
+        else if (key == 'W' || key == 'A' || key == 'S' || key == 'D') {
+            Vec2 new_pos = player.move_player(current_level.get_level_map(), key);
 
-    if (attacked_enemy) {
-        std::erase_if(enemies, [&player](auto& enemy) {
-            if(!enemy.isAlive()) {
-                player.add_xp(enemy.get_given_xp());
-                return true;
+            bool attacked_enemy = false;
+
+            for (auto& enemy: enemies) {
+                if (new_pos == enemy.get_entity_pos() && enemy.isAlive()) {
+                    enemy.modify_health(-player.get_damage());
+                    attacked_enemy = true;
+                }
             }
 
-            return false;
-        });
-    }
-    else {
-        player.get_entity_pos() = new_pos;
+            if (attacked_enemy) {
+                std::erase_if(enemies, [&player](auto& enemy) {
+                    if (!enemy.isAlive()) {
+                        player.add_xp(enemy.get_given_xp());
+                        return true;
+                    }
+                    return false;
+                });
+                turn_ended = true;
+            }
+            else if (new_pos != player.get_entity_pos()) {
+                player.get_entity_pos() = new_pos;
+                turn_ended = true;
+            }
+        }
+        else if (key == ' ') {
+            turn_ended = true; // spacebar - skip turn
+        }
     }
 }
 

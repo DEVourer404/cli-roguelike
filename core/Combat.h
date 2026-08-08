@@ -1,6 +1,7 @@
 #ifndef COMBAT_H
 #define COMBAT_H
 
+#include "Renderer.h"
 #include "../entities/Player.h"
 #include "../entities/Enemy.h"
 #include "../utils/Vec2.h"
@@ -22,12 +23,12 @@ private:
     TurnPhase current_phase_;
     int current_enemy_index_;
 
-    void player_turn(Player& player, std::vector<Enemy>& enemies, Map& game_map);
+    void player_turn(Player& player, std::vector<Enemy>& enemies, Level& current_level, Renderer& renderer);
     void enemy_turn(Enemy& enemy, Player& player, Map& game_map);
 public:
     std::string current_entity_turn_text_;
     Combat();
-    CombatResult combat_loop(Player& player, std::vector<Enemy>& enemies, Map& game_map);
+    CombatResult combat_loop(Player& player, std::vector<Enemy>& enemies, Level& current_level, Renderer& renderer);
 };
 
 

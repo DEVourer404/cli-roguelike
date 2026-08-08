@@ -10,27 +10,27 @@ level_(1), current_xp_(0), xp_to_next_level(100), stats_{1,1,1}, gained_levels(0
     current_health_ = Player::get_max_health();
 }
 
-char get_key() {
-    while (_kbhit()) _getch();
 
+char Player::get_key() {
     int key = _getch();
 
     if (key == 224 || key == 0) {
         key = _getch();
 
         switch (key) {
-            case 72: return 'W';
-            case 80: return 'S';
-            case 75: return 'A';
-            case 77: return 'D';
-            default: ;
+            case 72: return 'W'; // Up Arrow -> W
+            case 80: return 'S'; // Down Arrow -> S
+            case 75: return 'A'; // Left Arrow -> A
+            case 77: return 'D'; // Right Arrow -> D
+            default: return 0;
         }
     }
-    return 0;
+
+    return static_cast<char>(std::toupper(key));
 }
 
-Vec2 Player::move_player(Map& game_map) {
-    char k = get_key();
+Vec2 Player::move_player(Map& game_map, char k) {
+    //char k = get_key();
     Vec2 new_pos = get_entity_pos();
 
     if (k == 'W') new_pos.y-=1;
@@ -82,5 +82,18 @@ void Player::add_xp(int value) {
         gained_levels++;
     }
 }
+
+const std::vector<std::unique_ptr<Item>>& Player::get_inventory_items() const { return inventory_items_; }
+
+void Player::add_to_inventory(const Item* item) {
+    inventory_items_.push_back(item->clone());
+}
+
+void Player::remove_from_inventory() {
+
+}
+
+
+
 
 
