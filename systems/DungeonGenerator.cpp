@@ -40,7 +40,7 @@ Vec2 DungeonGenerator::generate(Map& game_map) {
         }
         else {
             if(game_map.get_tile(startX,startY) == '#') {
-                game_map.set_tile(startX, startY, '.');;
+                game_map.set_tile(startX, startY, '.');
                 floorCount++;
             }
         }

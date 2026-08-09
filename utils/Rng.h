@@ -15,4 +15,4 @@ namespace Rng {
     }
 }
 
-#endif RNG_H
+#endif // RNG_H

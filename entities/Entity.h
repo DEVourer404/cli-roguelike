@@ -17,17 +17,11 @@ public:
     const Vec2& get_entity_pos() const;
     Vec2& get_entity_pos();
     char get_entity_symbol() const;
-
     bool isAlive() const;
-
     virtual int get_max_health() const = 0;
-
     int get_current_health() const;
-
     virtual int get_damage() const = 0;
-
     const std::string& get_name() const;
-
     void modify_health(int value);
 
     virtual ~Entity() = default;

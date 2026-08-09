@@ -23,9 +23,7 @@ Map& Level::get_level_map() {
     return level_map_;
 }
 
-const Map::GameMapType& Level::get_map_grid() const {
-    return level_map_.get_game_map();
-}
+
 
 void Level::spawn_enemies(const Vec2& player_pos) {
     Vec2 temp_pos{0,0};
@@ -61,6 +59,17 @@ void Level::place_items(const Vec2 &player_pos) {
     }
 }
 
+bool Level::enemy_at(Vec2 &player_pos) {
+    return true;
+}
+
+bool Level::item_at(Vec2 &player_pos) {
+    return true;
+}
+
+
+
+const Map::GameMapType& Level::get_map_grid() const { return level_map_.get_game_map(); }
 char Level::get_tile(int x, int y) const { return level_map_.get_tile(x,y);}
 char Level::get_tile(const Vec2 &pos) const { return level_map_.get_tile(pos);}
 void Level::set_tile(int x, int y, char tile) { level_map_.set_tile(x,y, tile); }

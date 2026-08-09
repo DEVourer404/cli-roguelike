@@ -43,10 +43,9 @@ public:
     int get_max_health() const override;
     int get_damage() const override;
 
-    //void add_to_inventory(const Item* item);
     void add_to_inventory(std::unique_ptr<Item> item);
 
-    void remove_from_inventory();
+    void remove_from_inventory(Item* item_to_delete);
     const std::vector<std::unique_ptr<Item>>& get_inventory_items() const;
 };
 

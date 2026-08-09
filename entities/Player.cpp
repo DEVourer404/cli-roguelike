@@ -84,16 +84,13 @@ void Player::add_xp(int value) {
 
 const std::vector<std::unique_ptr<Item>>& Player::get_inventory_items() const { return inventory_items_; }
 
-// void Player::add_to_inventory(const Item* item) {
-//     inventory_items_.push_back(item->clone());
-// }
-
 void Player::add_to_inventory(std::unique_ptr<Item> item) {
     inventory_items_.push_back(std::move(item));
 }
 
-void Player::remove_from_inventory() {
-
+void Player::remove_from_inventory(Item* item_to_delete) {
+    std::erase_if(inventory_items_, [&item_to_delete](const auto& item) {
+                    return item.get()==item_to_delete; });
 }
 
 

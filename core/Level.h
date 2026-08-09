@@ -30,6 +30,9 @@ public:
 
     std::vector<Enemy> enemies;
     std::vector<std::unique_ptr<Item>> items;
+
+    bool enemy_at(Vec2& player_pos);
+    bool item_at(Vec2& player_pos);
 private:
     std::string level_name_;
     int level_num_;

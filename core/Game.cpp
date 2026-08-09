@@ -77,7 +77,7 @@ void Game::run() {
         combat_result_ = current_combat_->combat_loop(*player_, *current_level_, renderer_);
         switch (combat_result_) {
             case CombatResult::CONTINUE: {
-                move_to_new_level(*player_);
+                move_to_new_level();
                 break;
             }
             case CombatResult::GAME_OVER:
@@ -91,12 +91,13 @@ void Game::run() {
     }
 }
 
-void Game::move_to_new_level(const Player& player) {
+void Game::move_to_new_level() {
     if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->enemies.empty()) {
         renderer_.print_player_level_up(*player_);
 
-        while (player.gained_levels > 0) {
-            int choice = renderer_.print_player_level_up(player);
+        while (player_->gained_levels > 0) {
+            player_->modify_health(player_->get_max_health());
+            int choice = renderer_.print_player_level_up(*player_);
             player_->level_up(choice);
             player_->gained_levels--;
         }
