@@ -71,10 +71,10 @@ void Game::main_menu() {
 void Game::run() {
     while (is_running_) {
         system("CLS");
-        renderer_.print(*current_level_, *player_, current_level_->enemies);
+        renderer_.print(*current_level_, *player_);
         renderer_.print_current_text(current_combat_->current_entity_turn_text_);
 
-        combat_result_ = current_combat_->combat_loop(*player_, current_level_->enemies, *current_level_, renderer_);
+        combat_result_ = current_combat_->combat_loop(*player_, *current_level_, renderer_);
         switch (combat_result_) {
             case CombatResult::CONTINUE: {
                 move_to_new_level(*player_);
@@ -108,9 +108,10 @@ void Game::move_to_new_level(const Player& player) {
 void Game::init_level() {
     int level_num = current_level_ ? current_level_->get_level_num()+1 : 1;
 
-    current_level_ = std::make_unique<Level>("Dungeon floor", enemy_templates_, level_num);
+    current_level_ = std::make_unique<Level>("Dungeon floor", enemy_templates_, item_templates_,  level_num);
     player_->get_entity_pos() = dungeon_generator_.generate(current_level_->get_level_map());
     current_level_->spawn_enemies(player_->get_entity_pos());
+    current_level_->place_items(player_->get_entity_pos());
     current_combat_ = std::make_unique<Combat>();
 }
 

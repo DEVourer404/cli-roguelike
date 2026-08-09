@@ -2,14 +2,21 @@
 
 Renderer::Renderer() = default;
 
-void Renderer::print(const Level& current_level, Player& player,  const std::vector<Enemy>& enemies) const {
+void Renderer::print(const Level& current_level, Player& player) const {
     auto temp_map = current_level.get_map_grid();
 
     temp_map[player.get_entity_pos().y][player.get_entity_pos().x] = player.get_entity_symbol();
 
-    for (const auto& enemy: enemies) {
+    // render enemies
+    for (const auto& enemy: current_level.enemies) {
         if (enemy.isAlive())
             temp_map[enemy.get_entity_pos().y][enemy.get_entity_pos().x] = enemy.get_entity_symbol();
+    }
+
+    // render items
+    for (const auto& item: current_level.items) {
+        if (!item->is_picked_)
+            temp_map[item->get_item_pos().y][item->get_item_pos().x] = item->get_symbol();
     }
 
     std::cout << current_level.get_level_name() << ": " << current_level.get_level_num() << std::endl;

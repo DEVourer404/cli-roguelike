@@ -23,12 +23,12 @@ private:
     TurnPhase current_phase_;
     int current_enemy_index_;
 
-    void player_turn(Player& player, std::vector<Enemy>& enemies, Level& current_level, Renderer& renderer);
+    void player_turn(Player& player, Level& current_level, Renderer& renderer);
     void enemy_turn(Enemy& enemy, Player& player, Map& game_map);
 public:
     std::string current_entity_turn_text_;
     Combat();
-    CombatResult combat_loop(Player& player, std::vector<Enemy>& enemies, Level& current_level, Renderer& renderer);
+    CombatResult combat_loop(Player& player, Level& current_level, Renderer& renderer);
 };
 
 

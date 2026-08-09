@@ -30,7 +30,6 @@ char Player::get_key() {
 }
 
 Vec2 Player::move_player(Map& game_map, char k) {
-    //char k = get_key();
     Vec2 new_pos = get_entity_pos();
 
     if (k == 'W') new_pos.y-=1;
@@ -85,8 +84,12 @@ void Player::add_xp(int value) {
 
 const std::vector<std::unique_ptr<Item>>& Player::get_inventory_items() const { return inventory_items_; }
 
-void Player::add_to_inventory(const Item* item) {
-    inventory_items_.push_back(item->clone());
+// void Player::add_to_inventory(const Item* item) {
+//     inventory_items_.push_back(item->clone());
+// }
+
+void Player::add_to_inventory(std::unique_ptr<Item> item) {
+    inventory_items_.push_back(std::move(item));
 }
 
 void Player::remove_from_inventory() {

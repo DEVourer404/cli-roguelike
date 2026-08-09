@@ -6,33 +6,33 @@ Combat::Combat() {
     current_entity_turn_text_ = "=== YOUR TURN ===";
 }
 
-CombatResult Combat::combat_loop(Player& player, std::vector<Enemy>& enemies, Level& current_level, Renderer& renderer) {
+CombatResult Combat::combat_loop(Player& player, Level& current_level, Renderer& renderer) {
     switch (current_phase_) {
         case TurnPhase::PLAYER: {
-            player_turn(player, enemies, current_level, renderer);
+            player_turn(player, current_level, renderer);
 
-            if (!enemies.empty()) {
+            if (!current_level.enemies.empty()) {
                 current_phase_ = TurnPhase::ENEMY;
                 current_enemy_index_ = 0;
-                current_entity_turn_text_ = "=== Enemy " + std::to_string(current_enemy_index_  + 1) + " " + enemies[current_enemy_index_].get_name() + " ===";
+                current_entity_turn_text_ = "=== Enemy " + std::to_string(current_enemy_index_  + 1) + " " + current_level.enemies[current_enemy_index_].get_name() + " ===";
                 return CombatResult::WAIT_INPUT;
             }
             return CombatResult::CONTINUE;
         }
         case TurnPhase::ENEMY: {
-            enemy_turn(enemies[current_enemy_index_], player, current_level.get_level_map());
+            enemy_turn(current_level.enemies[current_enemy_index_], player, current_level.get_level_map());
 
             if (!player.isAlive())
                 return CombatResult::GAME_OVER;
 
             current_enemy_index_++;
-            if (current_enemy_index_ >= enemies.size()) {
+            if (current_enemy_index_ >= current_level.enemies.size()) {
                 current_phase_ = TurnPhase::PLAYER;
                 current_entity_turn_text_ = "=== YOUR TURN ===";
                 current_enemy_index_ = 0;
             }
             else {
-                current_entity_turn_text_ = "=== Enemy " + std::to_string(current_enemy_index_  + 1) + " " + enemies[current_enemy_index_].get_name() + " ===";
+                current_entity_turn_text_ = "=== Enemy " + std::to_string(current_enemy_index_  + 1) + " " + current_level.enemies[current_enemy_index_].get_name() + " ===";
 
             }
             return CombatResult::WAIT_INPUT;
@@ -41,7 +41,7 @@ CombatResult Combat::combat_loop(Player& player, std::vector<Enemy>& enemies, Le
     return CombatResult::CONTINUE;
 }
 
-void Combat::player_turn(Player& player, std::vector<Enemy>& enemies, Level& current_level, Renderer& renderer) {
+void Combat::player_turn(Player& player, Level& current_level, Renderer& renderer) {
     bool turn_ended = false;
 
     while (!turn_ended) {
@@ -54,7 +54,7 @@ void Combat::player_turn(Player& player, std::vector<Enemy>& enemies, Level& cur
                 turn_ended = true;
             } else {
                 system("cls");
-                renderer.print(current_level, player, enemies);
+                renderer.print(current_level, player);
                 renderer.print_current_text(current_entity_turn_text_);
             }
         }
@@ -62,16 +62,30 @@ void Combat::player_turn(Player& player, std::vector<Enemy>& enemies, Level& cur
             Vec2 new_pos = player.move_player(current_level.get_level_map(), key);
 
             bool attacked_enemy = false;
+            bool picked_item = false;
 
-            for (auto& enemy: enemies) {
+            for (auto& enemy: current_level.enemies) {
                 if (new_pos == enemy.get_entity_pos() && enemy.isAlive()) {
                     enemy.modify_health(-player.get_damage());
                     attacked_enemy = true;
                 }
             }
 
+            for (auto& item: current_level.items) {
+                if (new_pos == item->get_item_pos() && !item->is_picked_) {
+                    item->is_picked_ = true;
+                    player.add_to_inventory(std::move(item));
+                    //player.add_to_inventory(item.get());
+                    picked_item = true;
+                }
+            }
+
+            if(picked_item)
+                std::erase_if(current_level.items, [](const auto& item) {
+                    return item==nullptr; });
+
             if (attacked_enemy) {
-                std::erase_if(enemies, [&player](auto& enemy) {
+                std::erase_if(current_level.enemies, [&player](auto& enemy) {
                     if (!enemy.isAlive()) {
                         player.add_xp(enemy.get_given_xp());
                         return true;
