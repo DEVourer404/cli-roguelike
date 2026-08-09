@@ -66,7 +66,8 @@ void Combat::player_turn(Player& player, Level& current_level, Renderer& rendere
 
             for (auto& enemy: current_level.enemies) {
                 if (new_pos == enemy.get_entity_pos() && enemy.isAlive()) {
-                    enemy.modify_health(-player.get_damage());
+                    if (resolve_attack(player, enemy))
+                        player.add_xp(enemy.get_given_xp());
                     attacked_enemy = true;
                 }
             }
@@ -85,12 +86,8 @@ void Combat::player_turn(Player& player, Level& current_level, Renderer& rendere
                     return item==nullptr; });
 
             if (attacked_enemy) {
-                std::erase_if(current_level.enemies, [&player](auto& enemy) {
-                    if (!enemy.isAlive()) {
-                        player.add_xp(enemy.get_given_xp());
-                        return true;
-                    }
-                    return false;
+                std::erase_if(current_level.enemies, [](const auto& enemy) {
+                    return !enemy.isAlive();
                 });
                 turn_ended = true;
             }
@@ -109,11 +106,14 @@ void Combat::enemy_turn(Enemy& enemy, Player& player, Map& game_map) {
     Vec2 new_pos = enemy.find_path_to_player(player.get_entity_pos(), game_map);
 
     if(new_pos == player.get_entity_pos()) {
-        player.modify_health(-enemy.get_damage());
+        resolve_attack(enemy, player);
     }
     else {
         enemy.get_entity_pos() = new_pos;
     }
 }
 
-
+bool Combat::resolve_attack(Entity &attacker, Entity &target) {
+    target.modify_health(-attacker.get_damage());
+    return !target.isAlive();
+}

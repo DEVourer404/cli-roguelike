@@ -25,6 +25,8 @@ private:
 
     void player_turn(Player& player, Level& current_level, Renderer& renderer);
     void enemy_turn(Enemy& enemy, Player& player, Map& game_map);
+
+    bool resolve_attack(Entity& attacker, Entity& target);
 public:
     std::string current_entity_turn_text_;
     Combat();
