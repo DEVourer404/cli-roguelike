@@ -1,4 +1,5 @@
 #include "Combat.h"
+#include "../utils/Rng.h"
 
 Combat::Combat() {
     current_phase_ = TurnPhase::PLAYER;
@@ -6,10 +7,10 @@ Combat::Combat() {
     current_entity_turn_text_ = "=== YOUR TURN ===";
 }
 
-CombatResult Combat::combat_loop(Player& player, Level& current_level, Renderer& renderer) {
+CombatResult Combat::combat_loop(Player& player, Level& current_level) {
     switch (current_phase_) {
         case TurnPhase::PLAYER: {
-            player_turn(player, current_level, renderer);
+            player_turn(player, current_level);
 
             if (!current_level.enemies.empty()) {
                 current_phase_ = TurnPhase::ENEMY;
@@ -41,54 +42,43 @@ CombatResult Combat::combat_loop(Player& player, Level& current_level, Renderer&
     return CombatResult::CONTINUE;
 }
 
-void Combat::player_turn(Player& player, Level& current_level, Renderer& renderer) {
+void Combat::player_turn(Player& player, Level& current_level) {
     bool turn_ended = false;
 
     while (!turn_ended) {
         char key = player.get_key();
 
         if (key == 'I') {
-            int item_index = renderer.show_inventory(player);
-            if (item_index >= 0) {
-                // player.use_item(item_index);
+            bool used_item = UI::show_inventory(player);
+            if (used_item) {
                 turn_ended = true;
             } else {
                 system("cls");
-                renderer.print(current_level, player);
-                renderer.print_current_text(current_entity_turn_text_);
+                Renderer::print_game(current_level, player);
+                Renderer::print_current_text(current_entity_turn_text_);
             }
         }
         else if (key == 'W' || key == 'A' || key == 'S' || key == 'D') {
             Vec2 new_pos = player.move_player(current_level.get_level_map(), key);
 
-            bool attacked_enemy = false;
-            bool picked_item = false;
-
-            for (auto& enemy: current_level.enemies) {
-                if (new_pos == enemy.get_entity_pos() && enemy.isAlive()) {
-                    if (resolve_attack(player, enemy))
-                        player.add_xp(enemy.get_given_xp());
-                    attacked_enemy = true;
+            if (Enemy* enemy = current_level.enemy_at(new_pos)) {
+                if (resolve_attack(player, *enemy)) {
+                    player.add_xp(enemy->get_given_xp());
                 }
-            }
-
-            for (auto& item: current_level.items) {
-                if (new_pos == item->get_item_pos() && !item->is_picked_) {
-                    item->is_picked_ = true;
-                    player.add_to_inventory(std::move(item));
-                    //player.add_to_inventory(item.get());
-                    picked_item = true;
-                }
-            }
-
-            if(picked_item)
-                std::erase_if(current_level.items, [](const auto& item) {
-                    return item==nullptr; });
-
-            if (attacked_enemy) {
-                std::erase_if(current_level.enemies, [](const auto& enemy) {
-                    return !enemy.isAlive();
+                std::erase_if(current_level.enemies, [](const auto& e) {
+                    return !e.isAlive();
                 });
+                turn_ended = true;
+            }
+            else if (Item* item = current_level.item_at(new_pos)) {
+                item->is_picked_ = true;
+                auto it = std::find_if(current_level.items.begin(), current_level.items.end(),
+                    [item](const auto& ptr) { return ptr.get() == item; });
+                if (it != current_level.items.end()) {
+                    player.add_to_inventory(std::move(*it));
+                    current_level.items.erase(it);
+                }
+                player.get_entity_pos() = new_pos;
                 turn_ended = true;
             }
             else if (new_pos != player.get_entity_pos()) {
@@ -114,6 +104,24 @@ void Combat::enemy_turn(Enemy& enemy, Player& player, Map& game_map) {
 }
 
 bool Combat::resolve_attack(Entity &attacker, Entity &target) {
-    target.modify_health(-attacker.get_damage());
+    int raw_damage = attacker.get_damage();
+
+    if (auto* player = dynamic_cast<Player*>(&target)) {
+        // hadnle dodge chance
+        int dodge_chance = player->get_dodge_chance();
+        if (dodge_chance > 0) {
+            int roll = Rng::generate_random_number(1, 100);
+            if (roll <= dodge_chance) {
+                current_entity_turn_text_ = "Player DODGED " + attacker.get_name() + "'s attack!";
+                return false;
+            }
+        }
+
+        // handle armor rate
+        raw_damage -= player->get_armor_rate();
+        if (raw_damage < 1) raw_damage = 1;
+    }
+
+    target.modify_health(-raw_damage);
     return !target.isAlive();
 }
