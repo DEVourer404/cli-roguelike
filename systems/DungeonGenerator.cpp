@@ -7,7 +7,6 @@ int random_direction() {
     return (Rng::generate_random_number(1,4) - 1);
 }
 
-
 Vec2 DungeonGenerator::generate(Map& game_map) {
     int startX = Rng::generate_random_number(1, Map::WIDTH-2);
     int startY = Rng::generate_random_number(1, Map::HEIGHT-2);
@@ -66,5 +65,54 @@ void DungeonGenerator::place_exit(Map &game_map) {
     }
 }
 
+
+void DungeonGenerator::spawn_enemies(Level& current_level, const Vec2& player_pos, const std::vector<Enemy> &enemies_templates) {
+    if (enemies_templates.empty())
+      return;
+
+    current_level.enemies.push_back(enemies_templates[0]);
+    current_level.enemies.push_back(enemies_templates[0]);
+    current_level.enemies.push_back(enemies_templates[0]);
+
+    Vec2 temp_pos{0,0};
+    temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
+    temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
+
+    int enemies_counter = 0;
+
+    while (enemies_counter < current_level.enemies.size()) {
+        if (current_level.get_level_map().get_tile(temp_pos.x, temp_pos.y) == '.' && temp_pos != player_pos) {
+            current_level.enemies[enemies_counter].get_entity_pos() = temp_pos;
+            enemies_counter++;
+        }
+        temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
+        temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
+    }
+}
+
+void DungeonGenerator::place_items(Level& current_level, const Vec2 &player_pos, const std::vector<std::unique_ptr<Item>> &items_templates) {
+    if (items_templates.empty())
+        return;
+
+    Vec2 temp_pos{0,0};
+
+    current_level.items.push_back(items_templates[0]->clone());
+    current_level.items.push_back(items_templates[1]->clone());
+    current_level.items.push_back(items_templates[2]->clone());
+
+    temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
+    temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
+
+    int items_counter = 0;
+
+    while (items_counter < current_level.items.size()) {
+        if (current_level.get_level_map().get_tile(temp_pos.x, temp_pos.y) == '.' && temp_pos != player_pos) {
+            current_level.items[items_counter]->get_item_pos() = temp_pos;
+            items_counter++;
+        }
+        temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
+        temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
+    }
+}
 
 
