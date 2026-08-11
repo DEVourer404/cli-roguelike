@@ -1,8 +1,5 @@
 #include "Player.h"
 #include <conio.h>
-#include "../entities/Enemy.h"
-
-#include "../systems/DungeonGenerator.h"
 
 Player::Player(const std::string& name, char player_symbol):
 Entity(name, player_symbol),

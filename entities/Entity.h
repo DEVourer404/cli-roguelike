@@ -21,6 +21,8 @@ public:
     virtual int get_max_health() const = 0;
     int get_current_health() const;
     virtual int get_damage() const = 0;
+    virtual int get_armor_rate() const { return 0; }
+    virtual int get_dodge_chance() const { return 0; }
     const std::string& get_name() const;
     void modify_health(int value);
 

@@ -1,6 +1,5 @@
 #include "Level.h"
 #include "../entities/Enemy.h"
-#include "../utils/Rng.h"
 #include "../utils/Vec2.h"
 
 Level::Level(const std::string& level_name, int level_num):

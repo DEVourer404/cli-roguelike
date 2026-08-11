@@ -106,21 +106,19 @@ void Combat::enemy_turn(Enemy& enemy, Player& player, Map& game_map) {
 bool Combat::resolve_attack(Entity &attacker, Entity &target) {
     int raw_damage = attacker.get_damage();
 
-    if (auto* player = dynamic_cast<Player*>(&target)) {
-        // hadnle dodge chance
-        int dodge_chance = player->get_dodge_chance();
-        if (dodge_chance > 0) {
-            int roll = Rng::generate_random_number(1, 100);
-            if (roll <= dodge_chance) {
-                current_entity_turn_text_ = "Player DODGED " + attacker.get_name() + "'s attack!";
-                return false;
-            }
+    // handle dodge chance
+    int dodge_chance = target.get_dodge_chance();
+    if (dodge_chance > 0) {
+        int roll = Rng::generate_random_number(1, 100);
+        if (roll <= dodge_chance) {
+            current_entity_turn_text_ = target.get_name() + " DODGED " + attacker.get_name() + "'s attack!";
+            return false;
         }
-
-        // handle armor rate
-        raw_damage -= player->get_armor_rate();
-        if (raw_damage < 1) raw_damage = 1;
     }
+
+    // handle armor rate
+    raw_damage -= target.get_armor_rate();
+    if (raw_damage < 1) raw_damage = 1;
 
     target.modify_health(-raw_damage);
     return !target.isAlive();

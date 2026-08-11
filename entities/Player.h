@@ -49,8 +49,8 @@ public:
 
     int get_max_health() const override;
     int get_damage() const override;
-    int get_armor_rate() const;
-    int get_dodge_chance() const;
+    int get_armor_rate() const override;
+    int get_dodge_chance() const override;
 
     void use_item(int index);
     void drop_item(int index);

@@ -12,14 +12,14 @@ add_executable(CLI_Roguelike main.cpp
         core/Map.h
         core/ConsoleUI.cpp
         core/ConsoleUI.h
-        utils/RNG.h
+        utils/Rng.h
         utils/Vec2.h
-        Entities/Player.cpp
-        Entities/Player.h
-        Entities/Entity.cpp
-        Entities/Entity.h
-        Entities/Enemy.cpp
-        Entities/Enemy.h
+        entities/Player.cpp
+        entities/Player.h
+        entities/Entity.cpp
+        entities/Entity.h
+        entities/Enemy.cpp
+        entities/Enemy.h
         core/Level.cpp
         core/Level.h
         core/Combat.cpp
