@@ -142,7 +142,7 @@ namespace UI {
     }
 
     void show_wait_for_enter() {
-        std::cout << "Nacisnij Enter...";
+        std::cout << "Press ENTER...";
         int key = _getch();
         if (key == 224 || key == 0) {
             _getch();

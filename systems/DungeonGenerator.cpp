@@ -70,9 +70,10 @@ void DungeonGenerator::spawn_enemies(Level& current_level, const Vec2& player_po
     if (enemies_templates.empty())
       return;
 
-    current_level.enemies.push_back(enemies_templates[0]);
-    current_level.enemies.push_back(enemies_templates[0]);
-    current_level.enemies.push_back(enemies_templates[0]);
+    for (int i = 0; i < 3; ++i) {
+        int r = Rng::generate_random_number(0, enemies_templates.size() - 1);
+        current_level.enemies.push_back(enemies_templates[r]);
+    }
 
     Vec2 temp_pos{0,0};
     temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
@@ -96,9 +97,10 @@ void DungeonGenerator::place_items(Level& current_level, const Vec2 &player_pos,
 
     Vec2 temp_pos{0,0};
 
-    current_level.items.push_back(items_templates[0]->clone());
-    current_level.items.push_back(items_templates[1]->clone());
-    current_level.items.push_back(items_templates[2]->clone());
+    for (int i = 0; i < 3; ++i) {
+        int r = Rng::generate_random_number(0, items_templates.size() - 1);
+        current_level.items.push_back(items_templates[r]->clone());
+    }
 
     temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
     temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
