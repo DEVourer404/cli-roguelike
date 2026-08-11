@@ -71,10 +71,10 @@ void Game::main_menu() {
 void Game::run() {
     while (is_running_) {
         system("CLS");
-        renderer_.print(*current_level_, *player_);
-        renderer_.print_current_text(current_combat_->current_entity_turn_text_);
+        Renderer::print_game(*current_level_, *player_);
+        Renderer::print_current_text(current_combat_->current_entity_turn_text_);
 
-        combat_result_ = current_combat_->combat_loop(*player_, *current_level_, renderer_);
+        combat_result_ = current_combat_->combat_loop(*player_, *current_level_);
         switch (combat_result_) {
             case CombatResult::CONTINUE: {
                 move_to_new_level();
@@ -84,7 +84,7 @@ void Game::run() {
                 is_running_ = false;
                 break;
             case CombatResult::WAIT_INPUT: {
-                renderer_.wait_for_enter();
+                UI::show_wait_for_enter();
                 break;
             }
         }
@@ -93,15 +93,12 @@ void Game::run() {
 
 void Game::move_to_new_level() {
     if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->enemies.empty()) {
-        renderer_.print_player_level_up(*player_);
-
-        while (player_->gained_levels > 0) {
+        while (player_->has_pending_level_ups()) {
             player_->modify_health(player_->get_max_health());
-            int choice = renderer_.print_player_level_up(*player_);
+            int choice = UI::show_level_up(*player_);
             player_->level_up(choice);
-            player_->gained_levels--;
+            player_->consume_level_up();
         }
-
         init_level();
     }
 }
@@ -109,10 +106,10 @@ void Game::move_to_new_level() {
 void Game::init_level() {
     int level_num = current_level_ ? current_level_->get_level_num()+1 : 1;
 
-    current_level_ = std::make_unique<Level>("Dungeon floor", enemy_templates_, item_templates_,  level_num);
+    current_level_ = std::make_unique<Level>("Dungeon floor", level_num);
     player_->get_entity_pos() = dungeon_generator_.generate(current_level_->get_level_map());
-    current_level_->spawn_enemies(player_->get_entity_pos());
-    current_level_->place_items(player_->get_entity_pos());
+    dungeon_generator_.spawn_enemies(*current_level_, player_->get_entity_pos(), enemy_templates_);
+    dungeon_generator_.place_items(*current_level_, player_->get_entity_pos(), item_templates_);
     current_combat_ = std::make_unique<Combat>();
 }
 

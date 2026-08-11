@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include "Map.h"
-#include "Renderer.h"
+#include "ConsoleUI.h"
 #include "Level.h"
 #include "../entities/Player.h"
 #include "../entities/Enemy.h"
@@ -21,7 +21,6 @@ private:
     void move_to_new_level();
     void init_level();
 
-    Renderer renderer_;
     DungeonGenerator dungeon_generator_;
     std::vector<Enemy> enemy_templates_;
     std::vector<std::unique_ptr<Item>> item_templates_;

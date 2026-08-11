@@ -10,8 +10,8 @@ add_executable(CLI_Roguelike main.cpp
         systems/DungeonGenerator.h
         core/Map.cpp
         core/Map.h
-        core/Renderer.cpp
-        core/Renderer.h
+        core/ConsoleUI.cpp
+        core/ConsoleUI.h
         utils/RNG.h
         utils/Vec2.h
         Entities/Player.cpp
