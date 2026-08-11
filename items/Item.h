@@ -6,6 +6,8 @@
 
 #include "../utils/Vec2.h"
 
+class Player;
+
 class Item {
 protected:
     std::string id_;
@@ -18,7 +20,7 @@ public:
     virtual ~Item() = default;
 
     virtual std::unique_ptr<Item> clone() const = 0;
-    //virtual void use_item() const = 0;
+    virtual void use(Player& player) = 0;
 
     const std::string& get_id() const;
     char get_symbol() const;

@@ -10,6 +10,7 @@ public:
     Armor(std::string id, std::string name, int armor_rate);
 
     std::unique_ptr<Item> clone() const override;
+    void use(Player& player) override;
 
     int get_armor_rate() const;
 };
