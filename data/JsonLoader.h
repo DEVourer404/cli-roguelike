@@ -1,7 +1,7 @@
 #ifndef JSONLOADER_H
 #define JSONLOADER_H
 
-#include "../utils/json.hpp"
+#include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
 

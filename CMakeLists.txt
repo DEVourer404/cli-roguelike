@@ -3,6 +3,15 @@ project(CLI_Roguelike)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# adding json library
+include(FetchContent)
+FetchContent_Declare(
+        json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        GIT_TAG        v3.11.3
+)
+FetchContent_MakeAvailable(json)
+
 add_executable(CLI_Roguelike main.cpp
         core/Game.cpp
         core/Game.h
@@ -34,3 +43,11 @@ add_executable(CLI_Roguelike main.cpp
         items/Consumable.h
         data/JsonLoader.cpp
         data/JsonLoader.h)
+
+target_link_libraries(CLI_Roguelike PRIVATE nlohmann_json::nlohmann_json)
+
+add_custom_command(TARGET CLI_Roguelike POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/resources"
+        "$<TARGET_FILE_DIR:CLI_Roguelike>/resources"
+)

@@ -56,7 +56,8 @@ void Combat::player_turn(Player& player, Level& current_level) {
             if (used_item) {
                 turn_ended = true;
             } else {
-                system("cls");
+                Renderer::clear_screen();
+
                 Renderer::print_game(current_level, player);
                 Renderer::print_current_text(current_entity_turn_text_);
             }
@@ -73,7 +74,8 @@ void Combat::player_turn(Player& player, Level& current_level) {
                 });
 
                 current_entity_turn_text_ = "You attacked a " + enemy->get_name();
-                system("cls");
+                Renderer::clear_screen();
+
                 Renderer::print_game(current_level, player);
                 Renderer::print_current_text(current_entity_turn_text_);
                 
@@ -90,7 +92,8 @@ void Combat::player_turn(Player& player, Level& current_level) {
                 player.get_entity_pos() = new_pos;
 
                 current_entity_turn_text_ = "You picked a " + item->get_name();
-                system("cls");
+                Renderer::clear_screen();
+
                 Renderer::print_game(current_level, player);
                 Renderer::print_current_text(current_entity_turn_text_);
 

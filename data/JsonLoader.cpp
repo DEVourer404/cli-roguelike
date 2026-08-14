@@ -4,7 +4,7 @@
 #include "../items/Consumable.h"
 
 std::vector<Enemy> JsonLoader::load_enemies() {
-    std::ifstream file("../resources/enemies.json");
+    std::ifstream file("resources/enemies.json");
 
     std::vector<Enemy> loaded_enemies;
 

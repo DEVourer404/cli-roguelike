@@ -14,7 +14,8 @@ Game::Game(): is_running_(true) {
 void Game::main_menu() {
     bool in_menu = true;
     while (in_menu) {
-        system("CLS");
+        Renderer::clear_screen();
+
         std::cout << "================================================\n";
         std::cout << "         *  CLI ROGUELIKE DUNGEON  *            \n";
         std::cout << "================================================\n";
@@ -34,13 +35,15 @@ void Game::main_menu() {
         switch (choice) {
             case 1: {
                 in_menu = false;
-                system("CLS");
+                Renderer::clear_screen();
+
                 init_level();
                 run();
                 break;
             }
             case 2: {
-                system("CLS");
+                Renderer::clear_screen();
+
                 std::cout << "================================================\n";
                 std::cout << "              CONTROLS & HELP                   \n";
                 std::cout << "================================================\n";
@@ -70,7 +73,8 @@ void Game::main_menu() {
 
 void Game::run() {
     while (is_running_) {
-        system("CLS");
+        Renderer::clear_screen();
+
         Renderer::print_game(*current_level_, *player_);
         Renderer::print_current_text(current_combat_->current_entity_turn_text_);
 

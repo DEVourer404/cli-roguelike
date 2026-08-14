@@ -11,6 +11,7 @@ namespace Renderer {
     void print_game(const Level& current_level, Player& player);
     void print_player_stats(Player& player);
     void print_current_text(const std::string& current_turn_text);
+    void clear_screen();
 }
 
 namespace UI {

@@ -40,6 +40,10 @@ namespace Renderer {
         std::cout << current_turn_text << "\n";
     }
 
+    void clear_screen() {
+        std::cout << "\033[2J\033[H";
+    }
+
 }
 
 namespace UI {
@@ -53,7 +57,8 @@ namespace UI {
     }
 
     int show_level_up(const Player& player) {
-        system("CLS");
+        Renderer::clear_screen();
+
         std::cout << "You have gained another level! \n";
         std::cout << "Choose which stats you want to upgrade! \n";
         std::cout << "Current stats: STR: " << player.get_stats().strength << " | DEX: " << player.get_stats().dexterity << " | CON: " << player.get_stats().constitution << "\n\n";
@@ -75,7 +80,8 @@ namespace UI {
 
     bool show_inventory(Player& player) {
         while (true) {
-            system("cls");
+            Renderer::clear_screen();
+
             const auto& items = player.get_inventory_items();
 
             std::cout << "========================================\n";
@@ -108,7 +114,8 @@ namespace UI {
                 int selected_index = key - '1';
 
                 while (true) {
-                    system("cls");
+                    Renderer::clear_screen();
+
                     const auto& current_items = player.get_inventory_items();
                     if (selected_index >= static_cast<int>(current_items.size())) {
                         break;
