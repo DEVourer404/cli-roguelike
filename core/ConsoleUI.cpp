@@ -43,22 +43,6 @@ namespace Renderer {
 }
 
 namespace UI {
-
-    int show_level_up(const Player& player) {
-        system("CLS");
-        std::cout << "You have gained another level! \n";
-        std::cout << "Choose which stats you want to upgrade! \n";
-        std::cout << "Current stats: STR: " << player.get_stats().strength << " | DEX: " << player.get_stats().dexterity << " | CON: " << player.get_stats().constitution << "\n\n";
-
-        std::cout << "1. Strength (increase your damage) \n"
-                     "2. Dexterity (increase dodge chance) \n"
-                     "3. Constitution (increase your health) \n";
-        std::cout << "Your choice: ";
-        int choice;
-        std::cin >> choice;
-        return choice;
-    }
-
     static char read_key_upper() {
         int key = _getch();
         if (key == 224 || key == 0) {
@@ -67,6 +51,27 @@ namespace UI {
         }
         return static_cast<char>(std::toupper(key));
     }
+
+    int show_level_up(const Player& player) {
+        system("CLS");
+        std::cout << "You have gained another level! \n";
+        std::cout << "Choose which stats you want to upgrade! \n";
+        std::cout << "Current stats: STR: " << player.get_stats().strength << " | DEX: " << player.get_stats().dexterity << " | CON: " << player.get_stats().constitution << "\n\n";
+
+        std::cout << "[1]. Strength (increase your damage) \n"
+                     "[2]. Dexterity (increase dodge chance) \n"
+                     "[3]. Constitution (increase your health) \n";
+        std::cout << "Your choice: ";
+
+        while (true) {
+            char key = read_key_upper();
+            if (key == '1') return 1;
+            if (key == '2') return 2;
+            if (key == '3') return 3;
+        }
+    }
+
+
 
     bool show_inventory(Player& player) {
         while (true) {

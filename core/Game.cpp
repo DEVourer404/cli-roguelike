@@ -85,9 +85,11 @@ void Game::run() {
                 break;
             case CombatResult::WAIT_INPUT: {
                 UI::show_wait_for_enter();
+
                 break;
             }
         }
+
     }
 }
 
