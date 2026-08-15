@@ -31,7 +31,11 @@ A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++2
   <br>
   <em>Main Menu & Navigation</em>
 </p>
-
+<p align="center">
+   <img width="608" height="662" alt="controls_help" src="https://github.com/user-attachments/assets/035ed547-e43d-4040-90a8-83328fcffde1" />
+  <br>
+  <em>Controls & Help</em>
+</p>
 <p align="center">
   <img width="480" alt="fight_1" src="https://github.com/user-attachments/assets/13555c69-f1f8-4b71-a821-99afbc9587c4" />
   <br>
