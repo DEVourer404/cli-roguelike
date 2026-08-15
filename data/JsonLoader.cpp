@@ -28,7 +28,7 @@ std::vector<Enemy> JsonLoader::load_enemies() {
 }
 
 std::vector<std::unique_ptr<Item>> JsonLoader::load_items() {
-    std::ifstream file("../resources/items.json");
+    std::ifstream file("resources/items.json");
 
     std::vector<std::unique_ptr<Item>> loaded_items;
 

@@ -39,6 +39,17 @@ target_include_directories(CLI_Roguelike PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+if(WIN32)
+    target_sources(CLI_Roguelike PRIVATE
+            utils/Input_win.cpp
+    )
+else()
+    target_sources(CLI_Roguelike PRIVATE
+            utils/Input_posix.cpp
+    )
+endif()
+
+target_link_libraries(CLI_Roguelike PRIVATE nlohmann_json::nlohmann_json)
 add_custom_command(TARGET CLI_Roguelike POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/resources"

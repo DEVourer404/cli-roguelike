@@ -1,6 +1,7 @@
 #include "Combat.h"
 
 #include "utils/Rng.h"
+#include "utils/Input.h"
 
 Combat::Combat() {
     current_phase_ = TurnPhase::PLAYER;
@@ -49,9 +50,9 @@ void Combat::player_turn(Player& player, Level& current_level) {
     bool turn_ended = false;
 
     while (!turn_ended) {
-        char key = player.get_key();
+        Key key = Terminal::getKey();
 
-        if (key == 'I') {
+        if (key == Key::I) {
             bool used_item = UI::show_inventory(player);
             if (used_item) {
                 turn_ended = true;
@@ -62,18 +63,25 @@ void Combat::player_turn(Player& player, Level& current_level) {
                 Renderer::print_current_text(current_entity_turn_text_);
             }
         }
-        else if (key == 'W' || key == 'A' || key == 'S' || key == 'D') {
+        else if (key == Key::W || key == Key::A || key == Key::S || key == Key::D ||
+                 key == Key::Up || key == Key::Left || key == Key::Down || key == Key::Right) {
             Vec2 new_pos = player.move_player(current_level.get_level_map(), key);
 
             if (Enemy* enemy = current_level.enemy_at(new_pos)) {
                 if (resolve_attack(player, *enemy)) {
                     player.add_xp(enemy->get_given_xp());
                 }
-                std::erase_if(current_level.enemies, [](const auto& e) {
-                    return !e.isAlive();
-                });
 
                 current_entity_turn_text_ = "You attacked a " + enemy->get_name();
+
+                std::erase_if(current_level.enemies, [&](const auto& e) {
+                    if( !e.isAlive()) {
+                        current_entity_turn_text_ = "You killed a " + e.get_name();
+                        return true;
+                    }
+                    return false;
+                });
+
                 Renderer::clear_screen();
 
                 Renderer::print_game(current_level, player);
@@ -104,7 +112,8 @@ void Combat::player_turn(Player& player, Level& current_level) {
                 turn_ended = true;
             }
         }
-        else if (key == ' ') {
+        else if (key == Key::Space) {
+            current_entity_turn_text_ = "You waited a turn.";
             turn_ended = true; // spacebar - skip turn
         }
     }

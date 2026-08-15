@@ -1,4 +1,5 @@
 #include "ConsoleUI.h"
+#include "utils/Input.h"
 
 namespace Renderer {
 
@@ -47,13 +48,19 @@ namespace Renderer {
 }
 
 namespace UI {
-    static char read_key_upper() {
-        int key = _getch();
-        if (key == 224 || key == 0) {
-            _getch();
-            return 0;
+    static int key_to_item_index(Key key) {
+        switch (key) {
+            case Key::Num1: return 0;
+            case Key::Num2: return 1;
+            case Key::Num3: return 2;
+            case Key::Num4: return 3;
+            case Key::Num5: return 4;
+            case Key::Num6: return 5;
+            case Key::Num7: return 6;
+            case Key::Num8: return 7;
+            case Key::Num9: return 8;
+            default: return -1;
         }
-        return static_cast<char>(std::toupper(key));
     }
 
     int show_level_up(const Player& player) {
@@ -69,14 +76,12 @@ namespace UI {
         std::cout << "Your choice: ";
 
         while (true) {
-            char key = read_key_upper();
-            if (key == '1') return 1;
-            if (key == '2') return 2;
-            if (key == '3') return 3;
+            Key key = Terminal::getKey();
+            if (key == Key::Num1) return 1;
+            if (key == Key::Num2) return 2;
+            if (key == Key::Num3) return 3;
         }
     }
-
-
 
     bool show_inventory(Player& player) {
         while (true) {
@@ -104,15 +109,15 @@ namespace UI {
             std::cout << " [1-" << items.size() << "] Select item | [Q / ESC] Return to game\n";
             std::cout << "Choose option: ";
 
-            char key = read_key_upper();
+            Key key = Terminal::getKey();
 
-            if (key == 'Q' || key == 27) {
+            if (key == Key::Q || key == Key::Escape) {
                 return false;
             }
 
-            if (!items.empty() && key >= '1' && key <= '0' + static_cast<char>(items.size())) {
-                int selected_index = key - '1';
+            int selected_index = key_to_item_index(key);
 
+            if (!items.empty() && selected_index >= 0 && selected_index < static_cast<int>(items.size())) {
                 while (true) {
                     Renderer::clear_screen();
 
@@ -135,16 +140,16 @@ namespace UI {
                     std::cout << "========================================\n";
                     std::cout << "Choose action: ";
 
-                    char action_key = read_key_upper();
+                    Key action_key = Terminal::getKey();
 
-                    if (action_key == 'Q' || action_key == 27) {
+                    if (action_key == Key::Q || action_key == Key::Escape) {
                         break;
                     }
-                    if (action_key == '1') {
+                    if (action_key == Key::Num1) {
                         player.use_item(selected_index);
                         return true;
                     }
-                    if (action_key == '2') {
+                    if (action_key == Key::Num2) {
                         player.drop_item(selected_index);
                         break;
                     }
@@ -155,9 +160,11 @@ namespace UI {
 
     void show_wait_for_enter() {
         std::cout << "Press ENTER...";
-        int key = _getch();
-        if (key == 224 || key == 0) {
-            _getch();
+        while (true) {
+            Key key = Terminal::getKey();
+            if (key == Key::Enter || key == Key::Space) {
+                break;
+            }
         }
     }
 

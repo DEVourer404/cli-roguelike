@@ -10,6 +10,7 @@
 #include "items/Weapon.h"
 #include "items/Armor.h"
 #include "items/Consumable.h"
+#include "utils/Input.h"
 
 struct Stats {
     int strength;
@@ -33,12 +34,11 @@ private:
     std::vector<std::unique_ptr<Item>> inventory_items_;
 public:
     Player(const std::string& name, char player_symbol);
-    Vec2 move_player(Map& game_map, char k);
+    Vec2 move_player(Map& game_map, Key k);
 
     bool has_pending_level_ups() const;
     void consume_level_up();
 
-    char get_key();
     int get_level() const;
     void level_up(int choice);
     int get_current_xp() const;

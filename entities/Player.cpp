@@ -1,5 +1,4 @@
 #include "Player.h"
-#include <conio.h>
 
 Player::Player(const std::string& name, char player_symbol):
 Entity(name, player_symbol),
@@ -7,33 +6,15 @@ level_(1), current_xp_(0), xp_to_next_level(100), stats_{1,1,1}, gained_levels_(
     current_health_ = Player::get_max_health();
 }
 
-char Player::get_key() {
-    int key = _getch();
-
-    if (key == 224 || key == 0) {
-        key = _getch();
-
-        switch (key) {
-            case 72: return 'W'; // Up Arrow -> W
-            case 80: return 'S'; // Down Arrow -> S
-            case 75: return 'A'; // Left Arrow -> A
-            case 77: return 'D'; // Right Arrow -> D
-            default: return 0;
-        }
-    }
-
-    return static_cast<char>(std::toupper(key));
-}
-
-Vec2 Player::move_player(Map& game_map, char k) {
+Vec2 Player::move_player(Map& game_map, Key k) {
     Vec2 new_pos = get_entity_pos();
 
-    if (k == 'W') new_pos.y-=1;
-    if (k == 'S') new_pos.y+=1;
-    if (k == 'A') new_pos.x-=1;
-    if (k == 'D') new_pos.x+=1;
+    if (k == Key::W || k == Key::Up) new_pos.y -= 1;
+    if (k == Key::S || k == Key::Down) new_pos.y += 1;
+    if (k == Key::A || k == Key::Left) new_pos.x -= 1;
+    if (k == Key::D || k == Key::Right) new_pos.x += 1;
 
-    if(game_map.is_walkable(new_pos))
+    if (game_map.is_walkable(new_pos))
         return new_pos;
     else
         return get_entity_pos();

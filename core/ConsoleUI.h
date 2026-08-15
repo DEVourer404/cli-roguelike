@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <conio.h>
 #include "Level.h"
 #include "entities/Player.h"
 
