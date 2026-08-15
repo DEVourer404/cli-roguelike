@@ -1,5 +1,5 @@
 #include "Weapon.h"
-#include "../entities/Player.h"
+#include "entities/Player.h"
 #include <utility>
 
 Weapon::Weapon(std::string id, std::string name, int damage):

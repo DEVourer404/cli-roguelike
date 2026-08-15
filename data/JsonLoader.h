@@ -5,8 +5,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "../entities/Enemy.h"
-#include "../items/Item.h"
+#include "entities/Enemy.h"
+#include "items/Item.h"
 
 using json = nlohmann::json;
 

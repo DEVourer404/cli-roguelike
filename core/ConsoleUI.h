@@ -5,7 +5,7 @@
 #include <string>
 #include <conio.h>
 #include "Level.h"
-#include "../entities/Player.h"
+#include "entities/Player.h"
 
 namespace Renderer {
     void print_game(const Level& current_level, Player& player);

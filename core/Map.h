@@ -2,7 +2,7 @@
 #define MAP_H
 
 #include <array>
-#include "../utils/Vec2.h"
+#include "utils/Vec2.h"
 
 class Map {
 public:

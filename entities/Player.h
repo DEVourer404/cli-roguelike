@@ -2,14 +2,14 @@
 #define PLAYER_H
 
 #include "Entity.h"
-#include "../core/Map.h"
+#include "core/Map.h"
 #include <vector>
 #include <memory>
 
-#include "../items/Item.h"
-#include "../items/Weapon.h"
-#include "../items/Armor.h"
-#include "../items/Consumable.h"
+#include "items/Item.h"
+#include "items/Weapon.h"
+#include "items/Armor.h"
+#include "items/Consumable.h"
 
 struct Stats {
     int strength;

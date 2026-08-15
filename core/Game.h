@@ -4,12 +4,12 @@
 #include "Map.h"
 #include "ConsoleUI.h"
 #include "Level.h"
-#include "../entities/Player.h"
-#include "../entities/Enemy.h"
-#include "../items/Item.h"
-#include "../systems/DungeonGenerator.h"
+#include "entities/Player.h"
+#include "entities/Enemy.h"
+#include "items/Item.h"
+#include "systems/DungeonGenerator.h"
 #include "Combat.h"
-#include "../data/JsonLoader.h"
+#include "data/JsonLoader.h"
 
 class Game {
 public:

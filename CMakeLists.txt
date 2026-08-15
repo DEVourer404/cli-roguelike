@@ -12,39 +12,32 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(json)
 
-add_executable(CLI_Roguelike main.cpp
-        core/Game.cpp
-        core/Game.h
-        systems/DungeonGenerator.cpp
-        systems/DungeonGenerator.h
-        core/Map.cpp
-        core/Map.h
-        core/ConsoleUI.cpp
-        core/ConsoleUI.h
-        utils/Rng.h
-        utils/Vec2.h
-        entities/Player.cpp
-        entities/Player.h
-        entities/Entity.cpp
-        entities/Entity.h
-        entities/Enemy.cpp
-        entities/Enemy.h
-        core/Level.cpp
-        core/Level.h
-        core/Combat.cpp
-        core/Combat.h
-        items/Item.cpp
-        items/Item.h
-        items/Weapon.cpp
-        items/Weapon.h
-        items/Armor.cpp
-        items/Armor.h
-        items/Consumable.cpp
-        items/Consumable.h
-        data/JsonLoader.cpp
-        data/JsonLoader.h)
+add_executable(CLI_Roguelike
+        main.cpp
 
-target_link_libraries(CLI_Roguelike PRIVATE nlohmann_json::nlohmann_json)
+        core/Game.cpp
+        core/Map.cpp
+        core/ConsoleUI.cpp
+        core/Level.cpp
+        core/Combat.cpp
+
+        systems/DungeonGenerator.cpp
+
+        entities/Player.cpp
+        entities/Entity.cpp
+        entities/Enemy.cpp
+
+        items/Item.cpp
+        items/Weapon.cpp
+        items/Armor.cpp
+        items/Consumable.cpp
+
+        data/JsonLoader.cpp
+)
+
+target_include_directories(CLI_Roguelike PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 add_custom_command(TARGET CLI_Roguelike POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory

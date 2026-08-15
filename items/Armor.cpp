@@ -1,5 +1,5 @@
 #include "Armor.h"
-#include "../entities/Player.h"
+#include "entities/Player.h"
 #include <utility>
 
 Armor::Armor(std::string id, std::string name, int armor_rate):

@@ -5,8 +5,8 @@
 #include <string>
 #include <queue>
 #include "Entity.h"
-#include "../utils/Vec2.h"
-#include "../core/Map.h"
+#include "utils/Vec2.h"
+#include "core/Map.h"
 
 class Enemy: public Entity {
 private:

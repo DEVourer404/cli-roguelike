@@ -2,9 +2,9 @@
 #define COMBAT_H
 
 #include "ConsoleUI.h"
-#include "../entities/Player.h"
-#include "../entities/Enemy.h"
-#include "../utils/Vec2.h"
+#include "entities/Player.h"
+#include "entities/Enemy.h"
+#include "utils/Vec2.h"
 
 
 enum class CombatResult {

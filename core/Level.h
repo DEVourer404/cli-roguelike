@@ -4,10 +4,10 @@
 #include <string>
 #include "Map.h"
 #include <vector>
-#include "../entities/Enemy.h"
+#include "entities/Enemy.h"
 #include <memory>
 
-#include "../items/Item.h"
+#include "items/Item.h"
 
 class Level {
 public:

@@ -2,10 +2,10 @@
 #define DUNGEON_H
 
 
-#include "../core/Map.h"
-#include "../utils/Rng.h"
-#include "../utils/Vec2.h"
-#include "../core/Level.h"
+#include "core/Map.h"
+#include "utils/Rng.h"
+#include "utils/Vec2.h"
+#include "core/Level.h"
 
 class DungeonGenerator {
 public:

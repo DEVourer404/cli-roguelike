@@ -1,7 +1,7 @@
 #include "JsonLoader.h"
-#include "../items/Weapon.h"
-#include "../items/Armor.h"
-#include "../items/Consumable.h"
+#include "items/Weapon.h"
+#include "items/Armor.h"
+#include "items/Consumable.h"
 
 std::vector<Enemy> JsonLoader::load_enemies() {
     std::ifstream file("resources/enemies.json");

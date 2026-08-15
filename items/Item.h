@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 
-#include "../utils/Vec2.h"
+#include "utils/Vec2.h"
 
 class Player;
 

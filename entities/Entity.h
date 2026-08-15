@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "../utils/Vec2.h"
+#include "utils/Vec2.h"
 #include <string>
 
 class Entity {

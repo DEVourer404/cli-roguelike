@@ -1,5 +1,5 @@
 #include "Consumable.h"
-#include "../entities/Player.h"
+#include "entities/Player.h"
 
 Consumable::Consumable(std::string id, std::string name, int amount):
 Item(std::move(id), std::move(name), '!'), amount_(amount) {}

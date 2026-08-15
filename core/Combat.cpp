@@ -1,6 +1,6 @@
 #include "Combat.h"
 
-#include "../utils/Rng.h"
+#include "utils/Rng.h"
 
 Combat::Combat() {
     current_phase_ = TurnPhase::PLAYER;
