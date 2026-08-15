@@ -22,7 +22,7 @@ enum class TurnPhase {
 class Combat {
 private:
     TurnPhase current_phase_;
-    int current_enemy_index_;
+    size_t current_enemy_index_;
 
     void player_turn(Player& player, Level& current_level);
     void enemy_turn(Enemy& enemy, Player& player, Map& game_map);

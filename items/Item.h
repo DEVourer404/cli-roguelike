@@ -11,8 +11,8 @@ class Player;
 class Item {
 protected:
     std::string id_;
-    char symbol{};
     std::string name_;
+    char symbol{};
 
     Vec2 item_pos_;
 public:

@@ -71,7 +71,7 @@ void DungeonGenerator::spawn_enemies(Level& current_level, const Vec2& player_po
       return;
 
     for (int i = 0; i < 3; ++i) {
-        int r = Rng::generate_random_number(0, enemies_templates.size() - 1);
+        int r = Rng::generate_random_number(0, static_cast<int>(enemies_templates.size()) - 1);
         current_level.enemies.push_back(enemies_templates[r]);
     }
 
@@ -79,7 +79,7 @@ void DungeonGenerator::spawn_enemies(Level& current_level, const Vec2& player_po
     temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
     temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
 
-    int enemies_counter = 0;
+    size_t enemies_counter = 0;
 
     while (enemies_counter < current_level.enemies.size()) {
         if (current_level.get_level_map().get_tile(temp_pos.x, temp_pos.y) == '.' && temp_pos != player_pos) {
@@ -98,14 +98,14 @@ void DungeonGenerator::place_items(Level& current_level, const Vec2 &player_pos,
     Vec2 temp_pos{0,0};
 
     for (int i = 0; i < 3; ++i) {
-        int r = Rng::generate_random_number(0, items_templates.size() - 1);
+        int r = Rng::generate_random_number(0, static_cast<int>(items_templates.size()) - 1);
         current_level.items.push_back(items_templates[r]->clone());
     }
 
     temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
     temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
 
-    int items_counter = 0;
+    size_t items_counter = 0;
 
     while (items_counter < current_level.items.size()) {
         if (current_level.get_level_map().get_tile(temp_pos.x, temp_pos.y) == '.' && temp_pos != player_pos) {

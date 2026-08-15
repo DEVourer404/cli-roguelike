@@ -5,21 +5,9 @@ struct Vec2 {
     int x;
     int y;
 
-    Vec2(int startX = 0, int startY = 0): x(startX), y(startY){}
+    Vec2(int startX = 0, int startY = 0): x(startX), y(startY) {}
 
     bool operator==(const Vec2& other) const = default;
-
-    bool operator!=(const Vec2& other) const {
-        return !(*this == other);
-    }
-
-    Vec2& operator=(const Vec2& other) {
-        if(this != &other) {
-            x = other.x;
-            y = other.y;
-        }
-        return *this;
-    }
 
     Vec2 operator+(const Vec2& other) const {
         Vec2 result = *this;

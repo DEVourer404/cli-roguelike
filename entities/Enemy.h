@@ -11,8 +11,8 @@
 class Enemy: public Entity {
 private:
     int max_health_;
-    int given_xp_;
     int damage_;
+    int given_xp_;
 public:
     Enemy(const std::string& name, int health, int damage, char enemy_symbol, int given_xp);
     Vec2 find_path_to_player(const Vec2& player_pos, const Map& game_map);

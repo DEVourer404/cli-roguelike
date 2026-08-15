@@ -19,7 +19,10 @@ namespace Terminal {
         }
 
         char ch = 0;
-        read(STDIN_FILENO, &ch, 1);
+        if (read(STDIN_FILENO, &ch, 1) <= 0) {
+            tcsetattr(STDIN_FILENO, TCSANOW, &oldSettings);
+            return Key::Unknown;
+        }
 
         Key result = Key::Unknown;
 

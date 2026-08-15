@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 Entity::Entity(const std::string& name, char entity_symbol):
-name_(name), current_health_(0), entity_symbol_(entity_symbol) {}
+name_(name), entity_symbol_(entity_symbol), current_health_(0) {}
 
 const Vec2 &Entity::get_entity_pos() const{
     return entity_pos_;
@@ -26,7 +26,6 @@ int Entity::get_current_health() const {
 const std::string& Entity::get_name() const {
     return name_;
 }
-
 
 void Entity::modify_health(int value)  {
     current_health_ += value;

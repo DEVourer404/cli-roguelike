@@ -5,12 +5,12 @@
 #include <string>
 
 class Entity {
-protected:
-    int current_health_;
 private:
     std::string name_;
     char entity_symbol_;
     Vec2 entity_pos_;
+protected:
+    int current_health_;
 public:
     Entity(const std::string& name, char entity_symbol);
 
