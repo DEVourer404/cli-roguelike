@@ -1,6 +1,7 @@
 #ifndef COMBAT_H
 #define COMBAT_H
 
+#include <algorithm>
 #include "ConsoleUI.h"
 #include "entities/Player.h"
 #include "entities/Enemy.h"
