@@ -55,3 +55,9 @@ add_custom_command(TARGET CLI_Roguelike POST_BUILD
         "${CMAKE_CURRENT_SOURCE_DIR}/resources"
         "$<TARGET_FILE_DIR:CLI_Roguelike>/resources"
 )
+
+if(MSVC)
+    target_compile_options(CLI_Roguelike PRIVATE /W4)
+else()
+    target_compile_options(CLI_Roguelike PRIVATE -Wall -Wextra -Wpedantic)
+endif()

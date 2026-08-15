@@ -25,15 +25,10 @@ void Game::main_menu() {
         std::cout << "================================================\n";
         std::cout << "Select option: ";
 
-        int choice;
-        if (!(std::cin >> choice)) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;
-        }
+        Key key = Terminal::getKey();
 
-        switch (choice) {
-            case 1: {
+        switch (key) {
+            case Key::Num1: {
                 in_menu = false;
                 Renderer::clear_screen();
 
@@ -41,26 +36,44 @@ void Game::main_menu() {
                 run();
                 break;
             }
-            case 2: {
+            case Key::Num2: {
                 Renderer::clear_screen();
 
                 std::cout << "================================================\n";
                 std::cout << "              CONTROLS & HELP                   \n";
                 std::cout << "================================================\n";
-                std::cout << "  Movement keys:\n";
-                std::cout << "    [W] - Move Up\n";
-                std::cout << "    [S] - Move Down\n";
-                std::cout << "    [A] - Move Left\n";
-                std::cout << "    [D] - Move Right\n";
+                std::cout << "  Movement:\n";
+                std::cout << "    [W] / [Up Arrow]    - Move Up\n";
+                std::cout << "    [S] / [Down Arrow]  - Move Down\n";
+                std::cout << "    [A] / [Left Arrow]  - Move Left\n";
+                std::cout << "    [D] / [Right Arrow] - Move Right\n\n";
+                std::cout << "  Actions:\n";
+                std::cout << "    [I]                 - Open Inventory\n";
+                std::cout << "    [SPACE]             - Wait / Skip Turn\n";
+                std::cout << "    [Q] / [ESC]         - Back / Close Menu\n\n";
+                std::cout << "  Map Legend:\n";
+                std::cout << "    [P]   - Player        [#] - Wall\n";
+                std::cout << "    [g/o/s]- Enemies      [.] - Floor\n";
+                std::cout << "    [/]   - Weapon        [[] - Armor\n";
+                std::cout << "    [!]   - Potion        [>] - Floor Exit\n\n";
                 std::cout << "  Game Goal:\n";
-                std::cout << "    Explore the dungeon and avoid obstacles.\n";
+                std::cout << "    1. Move into enemies to attack them.\n";
+                std::cout << "    2. Step on items to collect them.\n";
+                std::cout << "    3. Defeat all enemies on the floor.\n";
+                std::cout << "    4. Reach the stairs [>] to level up\n";
+                std::cout << "       and proceed to the next dungeon floor!\n";
                 std::cout << "================================================\n";
-                std::cout << "Press ENTER to return to main menu...";
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cin.get();
+                std::cout << "Press ENTER or ESC to return to main menu...";
+
+                while (true) {
+                    Key k = Terminal::getKey();
+                    if (k == Key::Enter || k == Key::Escape || k == Key::Space) {
+                        break;
+                    }
+                }
                 break;
             }
-            case 3: {
+            case Key::Num3: {
                 std::cout << "Thank you for playing!\n";
                 in_menu = false;
                 break;
