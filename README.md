@@ -24,6 +24,9 @@ A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++2
 - **Data-Driven Architecture:**
   - Enemy templates and item definitions loaded from JSON files via `nlohmann/json` (fetched automatically via CMake `FetchContent`).
 
+<img width="632" height="212" alt="main_menu" src="https://github.com/user-attachments/assets/fd0d4f30-abda-4ab5-9920-5b0593b398a6" />
+<img width="480" height="468" alt="fight_1" src="https://github.com/user-attachments/assets/13555c69-f1f8-4b71-a821-99afbc9587c4" />
+
 ---
 
 ## Controls
