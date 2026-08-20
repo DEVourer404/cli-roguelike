@@ -88,25 +88,32 @@ namespace UI {
             Renderer::clear_screen();
 
             const auto& items = player.get_inventory_items();
+            int inv_size = player.get_inventory_size();
 
             std::cout << "========================================\n";
             std::cout << "             YOUR INVENTORY             \n";
             std::cout << "========================================\n";
 
-            if (items.empty()) {
+            if (inv_size == 0) {
                 std::cout << "  (Inventory is empty)\n";
             } else {
-                for (size_t i = 0; i < items.size(); ++i) {
-                    std::cout << "  [" << i + 1 << "] " << items[i]->get_name();
-                    if (items[i]->is_equipped_) {
-                        std::cout << " [EQUIPPED]";
+                for (int i = 0; i < inv_size; ++i) {
+                    if (items[i]) {
+                        std::cout << "  [" << i + 1 << "] " << items[i]->get_name();
+                        if (items[i]->is_equipped_) {
+                            std::cout << " [EQUIPPED]";
+                        }
+                        std::cout << "\n";
                     }
-                    std::cout << "\n";
                 }
             }
 
             std::cout << "========================================\n";
-            std::cout << " [1-" << items.size() << "] Select item | [Q / ESC] Return to game\n";
+            if (inv_size > 0) {
+                std::cout << " [1-" << inv_size << "] Select item | [Q / ESC] Return to game\n";
+            } else {
+                std::cout << " [Q / ESC] Return to game\n";
+            }
             std::cout << "Choose option: ";
 
             Key key = Terminal::getKey();
@@ -117,12 +124,13 @@ namespace UI {
 
             int selected_index = key_to_item_index(key);
 
-            if (!items.empty() && selected_index >= 0 && selected_index < static_cast<int>(items.size())) {
+            if (inv_size > 0 && selected_index >= 0 && selected_index < inv_size) {
                 while (true) {
                     Renderer::clear_screen();
 
                     const auto& current_items = player.get_inventory_items();
-                    if (selected_index >= static_cast<int>(current_items.size())) {
+                    int current_size = player.get_inventory_size();
+                    if (selected_index >= current_size || !current_items[selected_index]) {
                         break;
                     }
 
@@ -150,7 +158,7 @@ namespace UI {
                         return true;
                     }
                     if (action_key == Key::Num2) {
-                        player.drop_item(selected_index);
+                        player.remove_from_inventory(selected_index);
                         break;
                     }
                 }

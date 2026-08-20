@@ -2,7 +2,7 @@
 
 Player::Player(const std::string& name, char player_symbol):
 Entity(name, player_symbol),
-level_(1), current_xp_(0), xp_to_next_level(100), stats_{1,1,1}, gained_levels_(0) {
+level_(1), current_xp_(0), xp_to_next_level(100), stats_{1,1,1}, gained_levels_(0), size_(0) {
     current_health_ = Player::get_max_health();
 }
 
@@ -48,14 +48,8 @@ const Equipment& Player::get_equipment() const {
 }
 
 void Player::use_item(int index) {
-    if (index >= 0 && index < static_cast<int>(inventory_items_.size())) {
+    if (index >= 0 && index < size_ && inventory_items_[index]) {
         inventory_items_[index]->use(*this);
-    }
-}
-
-void Player::drop_item(int index) {
-    if (index >= 0 && index < static_cast<int>(inventory_items_.size())) {
-        remove_from_inventory(inventory_items_[index].get());
     }
 }
 
@@ -119,22 +113,40 @@ void Player::add_xp(int value) {
     }
 }
 
-const std::vector<std::unique_ptr<Item>>& Player::get_inventory_items() const { return inventory_items_; }
+const std::array<std::unique_ptr<Item>, Player::MAX_INVENTORY_SIZE>& Player::get_inventory_items() const { return inventory_items_; }
 
 void Player::add_to_inventory(std::unique_ptr<Item> item) {
-    inventory_items_.push_back(std::move(item));
+    if (!item || size_ >= MAX_INVENTORY_SIZE) return;
+
+    inventory_items_[size_] = std::move(item);
+    size_++;
+}
+
+void Player::remove_from_inventory(int index) {
+    if (index < 0 || index >= size_) return;
+
+    Item* item_ptr = inventory_items_[index].get();
+    if (equipment_.weapon == item_ptr) equipment_.weapon = nullptr;
+    if (equipment_.armor == item_ptr) equipment_.armor = nullptr;
+
+    for (int i = index; i < size_ - 1; ++i) {
+        inventory_items_[i] = std::move(inventory_items_[i + 1]);
+    }
+    inventory_items_[size_ - 1].reset();
+    size_--;
 }
 
 void Player::remove_from_inventory(Item* item_to_delete) {
-    if (equipment_.weapon == item_to_delete) {
-        equipment_.weapon = nullptr;
+    for (int i = 0; i < size_; ++i) {
+        if (inventory_items_[i].get() == item_to_delete) {
+            remove_from_inventory(i);
+            return;
+        }
     }
-    if (equipment_.armor == item_to_delete) {
-        equipment_.armor = nullptr;
-    }
-    std::erase_if(inventory_items_, [&item_to_delete](const auto& item) {
-                    return item.get()==item_to_delete; });
 }
+
+int Player::get_inventory_size() const { return size_; }
+bool Player::is_inventory_full() const { return size_ >= MAX_INVENTORY_SIZE; }
 
 bool Player::has_pending_level_ups() const { return gained_levels_ > 0; }
 void Player::consume_level_up() { if (gained_levels_ > 0) gained_levels_--; }

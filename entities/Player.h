@@ -24,6 +24,8 @@ struct Equipment {
 };
 
 class Player: public Entity{
+public:
+    static constexpr int MAX_INVENTORY_SIZE = 8;
 private:
     int level_;
     int current_xp_;
@@ -31,7 +33,8 @@ private:
     Stats stats_;
     int gained_levels_;
     Equipment equipment_;
-    std::vector<std::unique_ptr<Item>> inventory_items_;
+    int size_{0};
+    std::array<std::unique_ptr<Item>, MAX_INVENTORY_SIZE> inventory_items_;
 public:
     Player(const std::string& name, char player_symbol);
     Vec2 move_player(Map& game_map, Key k);
@@ -53,15 +56,16 @@ public:
     int get_dodge_chance() const override;
 
     void use_item(int index);
-    void drop_item(int index);
     void equip_weapon(Weapon* weapon);
     void equip_armor(Armor* armor);
     const Equipment& get_equipment() const;
 
     void add_to_inventory(std::unique_ptr<Item> item);
-
-    void remove_from_inventory(Item* item_to_delete);
-    const std::vector<std::unique_ptr<Item>>& get_inventory_items() const;
+    void remove_from_inventory(int index);
+    void remove_from_inventory(Item* item_to_delete); // used for using consumable items, Consumable.h/.cpp
+    int get_inventory_size() const;
+    bool is_inventory_full() const;
+    const std::array<std::unique_ptr<Item>, MAX_INVENTORY_SIZE>& get_inventory_items() const;
 };
 
 

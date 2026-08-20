@@ -90,16 +90,20 @@ void Combat::player_turn(Player& player, Level& current_level) {
                 turn_ended = true;
             }
             else if (Item* item = current_level.item_at(new_pos)) {
-                item->is_picked_ = true;
-                auto it = std::find_if(current_level.items.begin(), current_level.items.end(),
-                    [item](const auto& ptr) { return ptr.get() == item; });
-                if (it != current_level.items.end()) {
-                    player.add_to_inventory(std::move(*it));
-                    current_level.items.erase(it);
+                if (!player.is_inventory_full()) {
+                    item->is_picked_ = true;
+                    auto it = std::find_if(current_level.items.begin(), current_level.items.end(),
+                        [item](const auto& ptr) { return ptr.get() == item; });
+                    if (it != current_level.items.end()) {
+                        player.add_to_inventory(std::move(*it));
+                        current_level.items.erase(it);
+                    }
+                    player.get_entity_pos() = new_pos;
+                    current_entity_turn_text_ = "You picked a " + item->get_name();
+                } else {
+                    player.get_entity_pos() = new_pos;
+                    current_entity_turn_text_ = "Inventory is full! Cannot pick up " + item->get_name();
                 }
-                player.get_entity_pos() = new_pos;
-
-                current_entity_turn_text_ = "You picked a " + item->get_name();
                 Renderer::clear_screen();
 
                 Renderer::print_game(current_level, player);
