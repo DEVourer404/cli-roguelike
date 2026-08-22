@@ -176,4 +176,13 @@ namespace UI {
         }
     }
 
+    bool show_move_to_new_level() {
+        std::cout << "Press Enter to move to a new level\n";
+        Key key = Terminal::getKey();
+        if (key == Key::Enter)
+            return true;
+        else
+            return false;
+    }
+
 }

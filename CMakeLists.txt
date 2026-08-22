@@ -21,7 +21,7 @@ add_executable(CLI_Roguelike
         core/Level.cpp
         core/Combat.cpp
 
-        systems/DungeonGenerator.cpp
+        systems/LevelGenerator.cpp
 
         entities/Player.cpp
         entities/Entity.cpp

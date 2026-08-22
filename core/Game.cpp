@@ -112,13 +112,15 @@ void Game::run() {
 
 void Game::move_to_new_level() {
     if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->enemies.empty()) {
-        while (player_->has_pending_level_ups()) {
-            player_->modify_health(player_->get_max_health());
-            int choice = UI::show_level_up(*player_);
-            player_->level_up(choice);
-            player_->consume_level_up();
+        if(UI::show_move_to_new_level()) {
+            while (player_->has_pending_level_ups()) {
+                player_->modify_health(player_->get_max_health());
+                int choice = UI::show_level_up(*player_);
+                player_->level_up(choice);
+                player_->consume_level_up();
+            }
+            init_level();
         }
-        init_level();
     }
 }
 
@@ -126,9 +128,8 @@ void Game::init_level() {
     int level_num = current_level_ ? current_level_->get_level_num()+1 : 1;
 
     current_level_ = std::make_unique<Level>("Dungeon floor", level_num);
-    player_->get_entity_pos() = dungeon_generator_.generate(current_level_->get_level_map());
-    dungeon_generator_.spawn_enemies(*current_level_, player_->get_entity_pos(), enemy_templates_);
-    dungeon_generator_.place_items(*current_level_, player_->get_entity_pos(), item_templates_);
+    level_generator_.generate(*current_level_, RoomType::Normal, *player_, enemy_templates_, item_templates_);
+
     current_combat_ = std::make_unique<Combat>();
 }
 

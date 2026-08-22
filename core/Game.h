@@ -7,7 +7,7 @@
 #include "entities/Player.h"
 #include "entities/Enemy.h"
 #include "items/Item.h"
-#include "systems/DungeonGenerator.h"
+#include "systems/LevelGenerator.h"
 #include "Combat.h"
 #include "data/JsonLoader.h"
 
@@ -21,7 +21,7 @@ private:
     void move_to_new_level();
     void init_level();
 
-    DungeonGenerator dungeon_generator_;
+    LevelGenerator level_generator_;
     std::vector<Enemy> enemy_templates_;
     std::vector<std::unique_ptr<Item>> item_templates_;
 

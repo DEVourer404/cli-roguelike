@@ -17,6 +17,7 @@ namespace UI {
     bool show_inventory(Player& player);
     int show_level_up(const Player& player);
     void show_wait_for_enter();
+    bool show_move_to_new_level();
 }
 
 #endif // CONSOLE_UI_H

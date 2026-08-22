@@ -1,30 +1,47 @@
-#include "DungeonGenerator.h"
+#include "LevelGenerator.h"
+#include "entities/Player.h"
 
 
-DungeonGenerator::DungeonGenerator() {}
+LevelGenerator::LevelGenerator() = default;
 
 int random_direction() {
     return (Rng::generate_random_number(1,4) - 1);
 }
 
-Vec2 DungeonGenerator::generate(Map& game_map) {
+void LevelGenerator::generate(Level& current_level, RoomType room_type, Player& player,
+    const std::vector<Enemy>& enemies_templates, const std::vector<std::unique_ptr<Item>>& items_templates) {
+
+    switch (room_type) {
+        case RoomType::Normal:
+            generate_normal_level(current_level.get_level_map());
+            spawn_player(current_level, player);
+            spawn_enemies(current_level, player.get_entity_pos(), enemies_templates);
+            place_items(current_level, player.get_entity_pos(), items_templates);
+            break;
+        case RoomType::Shop:
+            generate_shop_level(current_level.get_level_map());
+            spawn_player(current_level, player);
+            break;
+        case RoomType::Boss:
+            break;
+        default:
+            break;
+    }
+}
+
+void LevelGenerator::generate_normal_level(Map& game_map, int direction_change_probability) {
     int startX = Rng::generate_random_number(1, Map::WIDTH-2);
     int startY = Rng::generate_random_number(1, Map::HEIGHT-2);
-
-    Vec2 start_pos{startX,startY};
 
     int dx[] = {0,0,1,-1};
     int dy[] = {-1,1,0,0};
 
     int dir = random_direction();
-
     int floorCount = 1;
-
-    //game_map.set_tile(startX, startY, 'S');
 
     while ((floorCount*100)/(Map::WIDTH*Map::HEIGHT) < 50) {
         // momentum - 70% szans na utrzymanie tego same kierunku
-        if(Rng::generate_random_number(1,100) <= 30)
+        if(Rng::generate_random_number(1,100) <= direction_change_probability)
             dir = random_direction();
         startX+=dx[dir];
         startY+=dy[dir];
@@ -44,13 +61,14 @@ Vec2 DungeonGenerator::generate(Map& game_map) {
             }
         }
     }
-
     place_exit(game_map);
-
-    return start_pos;
 }
 
-void DungeonGenerator::place_exit(Map &game_map) {
+void LevelGenerator::generate_shop_level(Map& game_map) {
+
+}
+
+void LevelGenerator::place_exit(Map &game_map) {
     char exit_symbol = '>';
     int exit_X = Rng::generate_random_number(1, Map::WIDTH-2);
     int exit_Y = Rng::generate_random_number(1, Map::HEIGHT-2);
@@ -65,8 +83,23 @@ void DungeonGenerator::place_exit(Map &game_map) {
     }
 }
 
+void LevelGenerator::spawn_player(Level &current_level, Player &player) {
+    Vec2 temp_pos{0,0};
+    temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
+    temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
 
-void DungeonGenerator::spawn_enemies(Level& current_level, const Vec2& player_pos, const std::vector<Enemy> &enemies_templates) {
+
+    while (true) {
+        if(current_level.get_level_map().get_tile(temp_pos.x, temp_pos.y) == '.') {
+            player.get_entity_pos() = temp_pos;
+            break;
+        }
+        temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
+        temp_pos.y = Rng::generate_random_number(1, Map::HEIGHT-2);
+    }
+}
+
+void LevelGenerator::spawn_enemies(Level& current_level, const Vec2& player_pos, const std::vector<Enemy> &enemies_templates) {
     if (enemies_templates.empty())
       return;
 
@@ -91,7 +124,7 @@ void DungeonGenerator::spawn_enemies(Level& current_level, const Vec2& player_po
     }
 }
 
-void DungeonGenerator::place_items(Level& current_level, const Vec2 &player_pos, const std::vector<std::unique_ptr<Item>> &items_templates) {
+void LevelGenerator::place_items(Level& current_level, const Vec2 &player_pos, const std::vector<std::unique_ptr<Item>> &items_templates) {
     if (items_templates.empty())
         return;
 
