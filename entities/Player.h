@@ -33,8 +33,9 @@ private:
     Stats stats_;
     int gained_levels_;
     Equipment equipment_;
-    int size_{0};
+    int size_;
     std::array<std::unique_ptr<Item>, MAX_INVENTORY_SIZE> inventory_items_;
+    int gold;
 public:
     Player(const std::string& name, char player_symbol);
     Vec2 move_player(Map& game_map, Key k);
@@ -47,6 +48,8 @@ public:
     int get_current_xp() const;
     int get_xp_to_next_level() const;
     Stats get_stats() const;
+    int get_gold() const;
+    void modify_gold(int amount);
 
     void add_xp(int value);
 

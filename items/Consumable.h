@@ -8,7 +8,7 @@ class Consumable: public Item{
 private:
     int amount_;
 public:
-    Consumable(std::string id, std::string name, int amount);
+    Consumable(std::string id, std::string name, int amount, int price = 0);
 
     std::unique_ptr<Item> clone() const override;
     void use(Player& player) override;

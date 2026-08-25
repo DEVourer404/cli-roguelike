@@ -3,18 +3,21 @@
     "id": "iron_sword",
     "name": "Iron Sword",
     "type": "weapon",
-    "damage": 5
+    "damage": 5,
+    "price": 40
   },
   {
     "id": "leather_armor",
     "name": "Leather Armor",
     "type": "armor",
-    "armor_rate": 3
+    "armor_rate": 3,
+    "price": 30
   },
   {
     "id": "health_potion",
     "name": "Health Potion",
     "type": "consumable",
-    "amount": 20
+    "amount": 20,
+    "price": 15
   }
 ]

@@ -2,8 +2,8 @@
 #include "entities/Player.h"
 #include <utility>
 
-Armor::Armor(std::string id, std::string name, int armor_rate):
-Item(std::move(id), std::move(name), '['), armor_rate_(armor_rate){}
+Armor::Armor(std::string id, std::string name, int armor_rate, int price):
+Item(std::move(id), std::move(name), '[', price), armor_rate_(armor_rate){}
 
 std::unique_ptr<Item> Armor::clone() const {
     return std::make_unique<Armor>(*this);

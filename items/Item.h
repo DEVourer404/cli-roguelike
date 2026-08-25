@@ -15,8 +15,10 @@ protected:
     char symbol{};
 
     Vec2 item_pos_;
+
+    int price_;
 public:
-    Item(std::string  id, std::string  name, char symbol);
+    Item(std::string  id, std::string  name, char symbol, int price = 0);
     virtual ~Item() = default;
 
     virtual std::unique_ptr<Item> clone() const = 0;
@@ -25,10 +27,12 @@ public:
     const std::string& get_id() const;
     char get_symbol() const;
     const std::string& get_name() const;
+    int get_price() const;
 
     Vec2& get_item_pos();
     bool is_picked_;
     bool is_equipped_;
+    bool is_sellable_;
 };
 
 

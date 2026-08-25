@@ -7,7 +7,7 @@ class Armor: public Item{
 private:
     int armor_rate_;
 public:
-    Armor(std::string id, std::string name, int armor_rate);
+    Armor(std::string id, std::string name, int armor_rate, int price = 0);
 
     std::unique_ptr<Item> clone() const override;
     void use(Player& player) override;

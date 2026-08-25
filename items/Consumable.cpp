@@ -1,8 +1,8 @@
 #include "Consumable.h"
 #include "entities/Player.h"
 
-Consumable::Consumable(std::string id, std::string name, int amount):
-Item(std::move(id), std::move(name), '!'), amount_(amount) {}
+Consumable::Consumable(std::string id, std::string name, int amount, int price):
+Item(std::move(id), std::move(name), '!', price), amount_(amount) {}
 
 std::unique_ptr<Item> Consumable::clone() const {
     return std::make_unique<Consumable>(*this);

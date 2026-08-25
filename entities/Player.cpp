@@ -2,7 +2,7 @@
 
 Player::Player(const std::string& name, char player_symbol):
 Entity(name, player_symbol),
-level_(1), current_xp_(0), xp_to_next_level(100), stats_{1,1,1}, gained_levels_(0), size_(0) {
+level_(1), current_xp_(0), xp_to_next_level(100), stats_{1,1,1}, gained_levels_(0), size_(0), gold(0) {
     current_health_ = Player::get_max_health();
 }
 
@@ -150,4 +150,9 @@ bool Player::is_inventory_full() const { return size_ >= MAX_INVENTORY_SIZE; }
 
 bool Player::has_pending_level_ups() const { return gained_levels_ > 0; }
 void Player::consume_level_up() { if (gained_levels_ > 0) gained_levels_--; }
+
+int Player::get_gold() const { return gold; }
+void Player::modify_gold(int amount)  {
+    gold += amount;
+}
 

@@ -43,15 +43,17 @@ std::vector<std::unique_ptr<Item>> JsonLoader::load_items() {
         auto name = item.at("name").get<std::string>();
         auto type = item.at("type").get<std::string>();
 
+        int price = item.value("price", 0);
+
         if (type == "weapon") {
             int damage = item.at("damage").get<int>();
-            loaded_items.push_back(std::make_unique<Weapon>(id, name, damage));
+            loaded_items.push_back(std::make_unique<Weapon>(id, name, damage, price));
         } else if (type == "armor") {
             int armor_rate = item.at("armor_rate").get<int>();
-            loaded_items.push_back(std::make_unique<Armor>(id, name, armor_rate));
+            loaded_items.push_back(std::make_unique<Armor>(id, name, armor_rate, price));
         } else if (type == "consumable") {
             int amount = item.at("amount").get<int>();
-            loaded_items.push_back(std::make_unique<Consumable>(id, name, amount));
+            loaded_items.push_back(std::make_unique<Consumable>(id, name, amount, price));
         }
     }
 
