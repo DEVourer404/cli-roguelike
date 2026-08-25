@@ -8,10 +8,10 @@ int random_direction() {
     return (Rng::generate_random_number(1,4) - 1);
 }
 
-void LevelGenerator::generate(Level& current_level, RoomType room_type, Player& player,
+void LevelGenerator::generate(Level& current_level, Player& player,
     const std::vector<Enemy>& enemies_templates, const std::vector<std::unique_ptr<Item>>& items_templates) {
 
-    switch (room_type) {
+    switch (current_level.room_type_) {
         case RoomType::Normal:
             generate_normal_level(current_level.get_level_map());
             spawn_player(current_level, player);
@@ -21,6 +21,10 @@ void LevelGenerator::generate(Level& current_level, RoomType room_type, Player& 
         case RoomType::Shop:
             generate_shop_level(current_level.get_level_map());
             spawn_player(current_level, player);
+            place_items(current_level, player.get_entity_pos(), items_templates);
+            for (auto& item : current_level.items) {
+                item->is_sellable_ = true;
+            }
             break;
         case RoomType::Boss:
             break;
@@ -65,7 +69,15 @@ void LevelGenerator::generate_normal_level(Map& game_map, int direction_change_p
 }
 
 void LevelGenerator::generate_shop_level(Map& game_map) {
+    for (int y = 1; y <= Map::HEIGHT - 2; y++) {
+        for (int x = 1; x <= Map::WIDTH - 2; x++) {
+            game_map.set_tile(x,y, '.');
+        }
+    }
+    // placing merchant
+    game_map.set_tile(Map::WIDTH / 2, Map::HEIGHT / 2, 'M');
 
+    place_exit(game_map);
 }
 
 void LevelGenerator::place_exit(Map &game_map) {

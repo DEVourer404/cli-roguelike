@@ -89,27 +89,55 @@ void Combat::player_turn(Player& player, Level& current_level) {
                 
                 turn_ended = true;
             }
-            else if (Item* item = current_level.item_at(new_pos)) {
-                if (!player.is_inventory_full()) {
-                    item->is_picked_ = true;
-                    auto it = std::find_if(current_level.items.begin(), current_level.items.end(),
-                        [item](const auto& ptr) { return ptr.get() == item; });
-                    if (it != current_level.items.end()) {
-                        player.add_to_inventory(std::move(*it));
-                        current_level.items.erase(it);
-                    }
-                    player.get_entity_pos() = new_pos;
-                    current_entity_turn_text_ = "You picked a " + item->get_name();
-                } else {
-                    player.get_entity_pos() = new_pos;
-                    current_entity_turn_text_ = "Inventory is full! Cannot pick up " + item->get_name();
-                }
+            else if (current_level.get_level_map().get_tile(new_pos) == 'M') {
+                UI::show_merchant_dialogue(player);
                 Renderer::clear_screen();
+                Renderer::print_game(current_level, player);
+                Renderer::print_current_text("Merchant: Safe travels, stranger!");
+            }
+            else if (Item* item = current_level.item_at(new_pos)) {
+                bool can_take = true;
 
+                if (item->is_sellable_) {
+                    if (UI::show_buy_item_prompt(*item, player.get_gold())) {
+                        if (player.get_gold() >= item->get_price()) {
+                            if (!player.is_inventory_full()) {
+                                player.modify_gold(-item->get_price());
+                                current_entity_turn_text_ = "Bought " + item->get_name() + " for " + std::to_string(item->get_price()) + "G!";
+                            } else {
+                                current_entity_turn_text_ = "Inventory is full!";
+                                can_take = false;
+                            }
+                        } else {
+                            current_entity_turn_text_ = "Not enough gold!";
+                            can_take = false;
+                        }
+                    } else {
+                        can_take = false;
+                    }
+                } else {
+                    current_entity_turn_text_ = "You picked a " + item->get_name();
+                }
+
+                if (can_take) {
+                    if (!player.is_inventory_full()) {
+                        item->is_picked_ = true;
+                        auto it = std::find_if(current_level.items.begin(), current_level.items.end(),
+                            [item](const auto& ptr) { return ptr.get() == item; });
+                        if (it != current_level.items.end()) {
+                            player.add_to_inventory(std::move(*it));
+                            current_level.items.erase(it);
+                        }
+                        player.get_entity_pos() = new_pos;
+                        turn_ended = true;
+                    } else {
+                        current_entity_turn_text_ = "Inventory is full!";
+                    }
+                }
+
+                Renderer::clear_screen();
                 Renderer::print_game(current_level, player);
                 Renderer::print_current_text(current_entity_turn_text_);
-
-                turn_ended = true;
             }
             else if (new_pos != player.get_entity_pos()) {
                 player.get_entity_pos() = new_pos;

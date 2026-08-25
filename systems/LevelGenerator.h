@@ -10,16 +10,10 @@
 
 class Player;
 
-enum class RoomType {
-    Normal,
-    Shop,
-    Boss
-};
-
 class LevelGenerator {
 public:
     LevelGenerator();
-    void generate(Level& current_level, RoomType room_type, Player& player,
+    void generate(Level& current_level, Player& player,
         const std::vector<Enemy>& enemies_templates, const std::vector<std::unique_ptr<Item>>& items_templates);
 
 private:

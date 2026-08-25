@@ -2,8 +2,8 @@
 #include "entities/Enemy.h"
 #include "utils/Vec2.h"
 
-Level::Level(const std::string& level_name, int level_num):
-level_name_(level_name), level_num_(level_num) {}
+Level::Level(const std::string& level_name, int level_num, RoomType room_type):
+level_name_(level_name), level_num_(level_num), room_type_(room_type) {}
 
 Map& Level::get_level_map() {
     return level_map_;

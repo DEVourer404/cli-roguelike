@@ -126,10 +126,9 @@ void Game::move_to_new_level() {
 
 void Game::init_level() {
     int level_num = current_level_ ? current_level_->get_level_num()+1 : 1;
-
-    current_level_ = std::make_unique<Level>("Dungeon floor", level_num);
-    level_generator_.generate(*current_level_, RoomType::Normal, *player_, enemy_templates_, item_templates_);
-
+    RoomType current_room = (level_num % 3 == 0) ? RoomType::Shop : RoomType::Normal;
+    current_level_ = std::make_unique<Level>("Dungeon floor", level_num, current_room);
+    level_generator_.generate(*current_level_, *player_, enemy_templates_, item_templates_);
     current_combat_ = std::make_unique<Combat>();
 }
 
