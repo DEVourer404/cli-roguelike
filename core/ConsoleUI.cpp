@@ -34,7 +34,8 @@ namespace Renderer {
         std::cout << "\n";
         std::cout << "HP: " << player.get_current_health() << "/" << player.get_max_health() << " | ";
         std::cout << "DMG: " << player.get_damage() << " | ";
-        std::cout << "Lvl: " << player.get_level() << " XP: " << player.get_current_xp() << "/" << player.get_xp_to_next_level() << "\n";
+        std::cout << "Lvl: " << player.get_level() << " XP: " << player.get_current_xp() << "/" << player.get_xp_to_next_level() << " | ";
+        std::cout << "Gold: " << player.get_gold() << "\n";
     }
 
     void print_current_text(const std::string& current_turn_text) {
@@ -164,6 +165,89 @@ namespace UI {
                 }
             }
         }
+    }
+
+    void show_merchant_dialogue(Player& player) {
+        while (true) {
+            Renderer::clear_screen();
+            std::cout << "================================================\n";
+            std::cout << "           *  DUNGEON MERCHANT  *               \n";
+            std::cout << "================================================\n";
+            std::cout << "  \"Greetings, traveler! Welcome to my shop.\n";
+            std::cout << "   Take a look at the goods on the floor,\n";
+            std::cout << "   or let me tend to your wounds for a fee.\"\n";
+            std::cout << "================================================\n";
+            std::cout << "  Your Gold: " << player.get_gold() << " G | HP: " 
+                      << player.get_current_health() << "/" << player.get_max_health() << "\n";
+            std::cout << "================================================\n";
+            std::cout << "  [1] \"Tell me some advice about this dungeon.\"\n";
+            std::cout << "  [2] Rest & Heal to full (Cost: 20 Gold)\n";
+            std::cout << "  [Q / ESC] Leave merchant\n";
+            std::cout << "================================================\n";
+            std::cout << "Choose option: ";
+
+            Key key = Terminal::getKey();
+
+            if (key == Key::Q || key == Key::Escape) {
+                break;
+            }
+
+            if (key == Key::Num1) {
+                Renderer::clear_screen();
+                std::cout << "================================================\n";
+                std::cout << "             * MERCHANT'S ADVICE *              \n";
+                std::cout << "================================================\n";
+                std::cout << "  \"Monsters hit hard in the lower depths.\n";
+                std::cout << "   Always keep a health potion in your bag!\n";
+                std::cout << "   And don't forget to equip new weapons and\n";
+                std::cout << "   armor from your inventory [I].\"\n";
+                std::cout << "================================================\n";
+                std::cout << "Press ENTER to return...";
+                while (true) {
+                    Key k = Terminal::getKey();
+                    if (k == Key::Enter || k == Key::Space || k == Key::Escape) break;
+                }
+            }
+            else if (key == Key::Num2) {
+                Renderer::clear_screen();
+
+                const int heal_cost = 20;
+
+                std::cout << "================================================\n";
+                std::cout << "             * HEALING SERVICE *                \n";
+                std::cout << "================================================\n";
+
+                if (player.get_current_health() >= player.get_max_health()) {
+                    std::cout << "  \"You are already at full health!\"\n";
+                } else if (player.get_gold() < heal_cost) {
+                    std::cout << "  \"You don't have enough gold! (Need " << heal_cost << " Gold)\"\n";
+                } else {
+                    player.modify_gold(-heal_cost);
+                    player.modify_health(player.get_max_health());
+                    std::cout << "  \"There you go! Your wounds are fully healed.\"\n";
+                    std::cout << "  HP restored to " << player.get_max_health() << "/" << player.get_max_health() << "!\n";
+                }
+                std::cout << "================================================\n";
+                std::cout << "Press ENTER to continue...";
+
+                while (true) {
+                    Key k = Terminal::getKey();
+                    if (k == Key::Enter || k == Key::Space || k == Key::Escape) break;
+                }
+            }
+        }
+    }
+
+    bool show_buy_item_prompt(const Item& item, int player_gold) {
+        std::cout << "\n========================================\n";
+        std::cout << " Item for sale: " << item.get_name() << "\n";
+        std::cout << " Price: " << item.get_price() << " Gold | Your Gold: " << player_gold << " Gold\n";
+        std::cout << "========================================\n";
+        std::cout << " [ENTER] Buy item | [Any other key] Cancel\n";
+        std::cout << "Choose option: ";
+
+        Key key = Terminal::getKey();
+        return (key == Key::Enter);
     }
 
     void show_wait_for_enter() {
