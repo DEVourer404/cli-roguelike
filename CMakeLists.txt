@@ -19,7 +19,7 @@ add_executable(CLI_Roguelike
         core/Map.cpp
         core/ConsoleUI.cpp
         core/Level.cpp
-        core/Combat.cpp
+        core/TurnManager.cpp
 
         systems/LevelGenerator.cpp
 

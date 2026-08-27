@@ -8,7 +8,7 @@
 #include "entities/Enemy.h"
 #include "items/Item.h"
 #include "systems/LevelGenerator.h"
-#include "Combat.h"
+#include "TurnManager.h"
 #include "data/JsonLoader.h"
 
 class Game {
@@ -27,9 +27,8 @@ private:
 
     std::unique_ptr<Player> player_;
     std::unique_ptr<Level> current_level_;
-    std::unique_ptr<Combat> current_combat_;
+    std::unique_ptr<TurnManager> turn_manager_;
 
-    CombatResult combat_result_;
     bool is_running_;
 };
 

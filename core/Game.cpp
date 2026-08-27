@@ -7,8 +7,6 @@ Game::Game(): is_running_(true) {
     JsonLoader json_loader;
     enemy_templates_ = json_loader.load_enemies();
     item_templates_ = json_loader.load_items();
-
-    combat_result_ = CombatResult::CONTINUE;
 }
 
 void Game::main_menu() {
@@ -87,26 +85,14 @@ void Game::main_menu() {
 void Game::run() {
     while (is_running_) {
         Renderer::clear_screen();
-
         Renderer::print_game(*current_level_, *player_);
-        Renderer::print_current_text(current_combat_->current_entity_turn_text_);
 
-        combat_result_ = current_combat_->combat_loop(*player_, *current_level_);
-        switch (combat_result_) {
-            case CombatResult::CONTINUE: {
-                move_to_new_level();
-                break;
-            }
-            case CombatResult::GAME_OVER:
-                is_running_ = false;
-                break;
-            case CombatResult::WAIT_INPUT: {
-                UI::show_wait_for_enter();
+        turn_manager_->process_turn(*player_, *current_level_);
 
-                break;
-            }
-        }
-
+        if (!player_->isAlive())
+            is_running_ = false;
+        else if (current_level_->enemies.empty())
+            move_to_new_level();
     }
 }
 
@@ -129,6 +115,6 @@ void Game::init_level() {
     RoomType current_room = (level_num % 3 == 0) ? RoomType::Shop : RoomType::Normal;
     current_level_ = std::make_unique<Level>("Dungeon floor", level_num, current_room);
     level_generator_.generate(*current_level_, *player_, enemy_templates_, item_templates_);
-    current_combat_ = std::make_unique<Combat>();
+    turn_manager_ = std::make_unique<TurnManager>();
 }
 
