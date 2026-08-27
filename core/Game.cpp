@@ -50,16 +50,17 @@ void Game::main_menu() {
                 std::cout << "    [SPACE]             - Wait / Skip Turn\n";
                 std::cout << "    [Q] / [ESC]         - Back / Close Menu\n\n";
                 std::cout << "  Map Legend:\n";
-                std::cout << "    [P]   - Player        [#] - Wall\n";
-                std::cout << "    [g/o/s]- Enemies      [.] - Floor\n";
-                std::cout << "    [/]   - Weapon        [[] - Armor\n";
-                std::cout << "    [!]   - Potion        [>] - Floor Exit\n\n";
-                std::cout << "  Game Goal:\n";
+                std::cout << "    [P]    - Player        [#] - Wall\n";
+                std::cout << "    [g/o/s]- Enemies       [.] - Floor\n";
+                std::cout << "    [M]    - Merchant      [>] - Floor Exit\n";
+                std::cout << "    [/]    - Weapon        [[] - Armor\n";
+                std::cout << "    [!]    - Potion\n\n";
+                std::cout << "  Game Goal & Mechanics:\n";
                 std::cout << "    1. Move into enemies to attack them.\n";
-                std::cout << "    2. Step on items to collect them.\n";
-                std::cout << "    3. Defeat all enemies on the floor.\n";
-                std::cout << "    4. Reach the stairs [>] to level up\n";
-                std::cout << "       and proceed to the next dungeon floor!\n";
+                std::cout << "    2. Defeat enemies to earn XP, level ups, and Gold.\n";
+                std::cout << "    3. Step on items to pick them up (or buy in Shops).\n";
+                std::cout << "    4. Walk into Merchant [M] to chat or buy healing.\n";
+                std::cout << "    5. Clear all enemies and reach [>] to advance!\n";
                 std::cout << "================================================\n";
                 std::cout << "Press ENTER or ESC to return to main menu...";
 

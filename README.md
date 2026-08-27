@@ -11,13 +11,19 @@ A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++2
 
 ## Features
 
-- **Procedural Map Generation:** Generates organic, connected caves using a random walk algorithm with directional momentum.
+- **Procedural Generation & Room Types:**
+  - Generates organic, connected caves using a random walk algorithm with directional momentum.
+  - Dedicated **Shop Floors** featuring a friendly Merchant (`M`) and purchaseable items on the floor.
 - **Turn-Based Combat & AI:**
   - Enemies track the player using a **Breadth-First Search (BFS)** pathfinding algorithm.
   - Core RPG stats system (Strength, Dexterity, Constitution) affecting damage, dodge chance, and maximum health.
+  - Gold rewards and XP leveling system upon defeating monsters.
+- **Economy & Merchant System:**
+  - **Bump-to-talk:** Interact with the Merchant (`M`) for dungeon advice and full-heal services.
+  - **Bump-to-buy:** Step onto shop floor items to preview prices and purchase with collected Gold.
 - **Polymorphic Item & Equipment System:**
   - Weapons, Armor, and Consumables utilizing dynamic polymorphism and the Prototype Pattern (`clone()`).
-  - Interactive inventory management (equip, use, drop).
+  - Fixed-size inventory management (equip, use, drop).
 - **Cross-Platform Terminal Engine:**
   - Custom I/O abstraction (`Terminal::getKey()`) using POSIX `termios` raw mode for Linux/macOS and console API for Windows.
   - ANSI escape codes for clean terminal rendering without platform-locked libraries.
@@ -59,10 +65,10 @@ A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++2
 ## Project Structure
 
 ```text
-├── core/         # Game loop, level orchestration, combat system, and UI rendering
+├── core/         # Game loop, level orchestration, turn management (TurnManager), and UI rendering
 ├── entities/     # Entity hierarchy (Player, Enemy, base Entity)
 ├── items/        # Polymorphic item system (Weapon, Armor, Consumable, base Item)
-├── systems/      # Procedural dungeon generation algorithms
+├── systems/      # Procedural dungeon generation algorithms (LevelGenerator)
 ├── data/         # JSON data loader (nlohmann/json)
 ├── utils/        # Vector math (Vec2), RNG utilities, and cross-platform Terminal input
 └── resources/    # enemies.json, items.json game configurations
@@ -118,4 +124,5 @@ cmake --build build --config Release
 - [ ] **Combat Expansion:** Active skills, status effects (poison, stun), and ranged combat.
 - [ ] **Advanced AI & Fog of War:** Field of View (FOV / shadowcasting) and distinct enemy archetypes (ranged, fleeing, aggressive).
 - [ ] **Content Expansion:** Wider selection of enemy types, weapons, armors, and consumables.
-- [ ] **Special Floor Types:** Shopkeeper / merchant levels, shrine rooms, and boss encounters.
+- [x] **Special Floor Types:** Shopkeeper / merchant levels with item purchasing and healing services.
+- [ ] **Boss Encounters & Shrines:** Boss fights on specific milestone floors and shrine buff interactions.
