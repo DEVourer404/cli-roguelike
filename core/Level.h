@@ -16,6 +16,11 @@ enum class RoomType {
 };
 
 class Level {
+private:
+    std::string level_name_;
+    int level_num_;
+    Map level_map_;
+
 public:
     Level(const std::string& level_name, int level_num = 0, RoomType room_type = RoomType::Normal);
 
@@ -31,10 +36,7 @@ public:
 
     Enemy* enemy_at(const Vec2& player_pos);
     Item* item_at(const Vec2& player_pos);
-private:
-    std::string level_name_;
-    int level_num_;
-    Map level_map_;
+
 };
 
 

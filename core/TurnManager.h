@@ -5,6 +5,7 @@
 #include "entities/Player.h"
 #include "entities/Enemy.h"
 #include "utils/Vec2.h"
+#include <algorithm>
 
 class TurnManager {
 private:
