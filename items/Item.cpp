@@ -1,7 +1,7 @@
 #include "Item.h"
 
 Item::Item(std::string  id, std::string  name, char symbol, int price):
-id_(std::move(id)), name_(std::move(name)), symbol(symbol), is_picked_(false), price_(price), is_sellable_(false) {}
+id_(std::move(id)), name_(std::move(name)), symbol(symbol), price_(price), is_picked_(false), is_sellable_(false) {}
 
 char Item::get_symbol() const { return symbol; }
 const std::string &Item::get_name() const { return name_; }
