@@ -16,7 +16,7 @@ private:
     bool handle_merchant(Player& player, Level& current_level, Vec2 new_pos);
     bool handle_item_pickup(Player& player, Level& current_level, Vec2 new_pos);
 
-    bool resolve_attack(Entity& attacker, Entity& target);
+    bool resolve_attack(const Entity& attacker, Entity& target);
 public:
     TurnManager();
     void process_turn(Player& player, Level& current_level);

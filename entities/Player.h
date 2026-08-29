@@ -51,6 +51,8 @@ public:
     int get_gold() const;
     void modify_gold(int amount);
 
+    bool is_equipped(const Item *item) const;
+
     void add_xp(int value);
 
     int get_max_health() const override;
@@ -59,6 +61,7 @@ public:
     int get_dodge_chance() const override;
 
     void use_item(int index);
+
     void equip_weapon(Weapon* weapon);
     void equip_armor(Armor* armor);
     const Equipment& get_equipment() const;

@@ -16,7 +16,7 @@ namespace Renderer {
 
         // render items
         for (const auto& item: current_level.items) {
-            if (!item->is_picked_)
+            if (!item->is_picked())
                 temp_map[item->get_item_pos().y][item->get_item_pos().x] = item->get_symbol();
         }
 
@@ -30,7 +30,7 @@ namespace Renderer {
         print_player_stats(player);
     }
 
-    void print_player_stats(Player& player) {
+    void print_player_stats(const Player& player) {
         std::cout << "\n";
         std::cout << "HP: " << player.get_current_health() << "/" << player.get_max_health() << " | ";
         std::cout << "DMG: " << player.get_damage() << " | ";
@@ -40,6 +40,18 @@ namespace Renderer {
 
     void print_current_text(const std::string& current_turn_text) {
         std::cout << current_turn_text << "\n";
+    }
+
+    void print_death_score(const Player& player, const Level& current_level) {
+        std::cout << "========================================\n";
+        std::cout << "                YOU DIED                \n";
+        std::cout << "========================================\n";
+
+        std::cout << "You reached " << current_level.get_level_num() << " floor \n";
+        print_player_stats(player);
+        std::cout << "\n";
+
+        UI::show_wait_for_enter();
     }
 
     void clear_screen() {
@@ -101,7 +113,7 @@ namespace UI {
                 for (int i = 0; i < inv_size; ++i) {
                     if (items[i]) {
                         std::cout << "  [" << i + 1 << "] " << items[i]->get_name();
-                        if (items[i]->is_equipped_) {
+                        if(player.is_equipped(items[i].get())) {
                             std::cout << " [EQUIPPED]";
                         }
                         std::cout << "\n";
@@ -139,7 +151,7 @@ namespace UI {
 
                     std::cout << "========================================\n";
                     std::cout << " Selected: " << selected_item->get_name();
-                    if (selected_item->is_equipped_) {
+                    if(player.is_equipped(selected_item)) {
                         std::cout << " [EQUIPPED]";
                     }
                     std::cout << "\n========================================\n";

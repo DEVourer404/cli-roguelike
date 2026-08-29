@@ -20,7 +20,7 @@ Enemy* Level::enemy_at(const Vec2 &player_pos) {
 
 Item* Level::item_at(const Vec2 &player_pos) {
     for (auto& item: items) {
-        if (player_pos == item->get_item_pos() && !item->is_picked_) {
+        if (player_pos == item->get_item_pos() && !item->is_picked()) {
             return item.get();
         }
     }
@@ -28,6 +28,5 @@ Item* Level::item_at(const Vec2 &player_pos) {
 }
 
 const Map::GameMapType& Level::get_map_grid() const { return level_map_.get_game_map(); }
-
-
+void Level::reset() { level_num_ = 1; }
 

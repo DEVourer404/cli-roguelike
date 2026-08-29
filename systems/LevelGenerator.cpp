@@ -23,7 +23,7 @@ void LevelGenerator::generate(Level& current_level, Player& player,
             spawn_player(current_level, player);
             place_items(current_level, player.get_entity_pos(), items_templates);
             for (auto& item : current_level.items) {
-                item->is_sellable_ = true;
+                item->set_sellable(true);
             }
             break;
         case RoomType::Boss:

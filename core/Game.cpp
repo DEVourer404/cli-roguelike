@@ -2,8 +2,6 @@
 #include <limits>
 
 Game::Game(): is_running_(true) {
-    player_ = std::make_unique<Player>("player", 'P');
-
     JsonLoader json_loader;
     enemy_templates_ = json_loader.load_enemies();
     item_templates_ = json_loader.load_items();
@@ -27,9 +25,10 @@ void Game::main_menu() {
 
         switch (key) {
             case Key::Num1: {
-                in_menu = false;
                 Renderer::clear_screen();
-
+                is_running_ = true;
+                player_ = std::make_unique<Player>("player", 'P');
+                current_level_.reset();
                 init_level();
                 run();
                 break;
@@ -95,14 +94,17 @@ void Game::run() {
         else if (current_level_->enemies.empty())
             move_to_new_level();
     }
+
+    Renderer::clear_screen();
+    Renderer::print_death_score(*player_, *current_level_);
 }
 
 void Game::move_to_new_level() {
     if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->enemies.empty()) {
         if(UI::show_move_to_new_level()) {
             while (player_->has_pending_level_ups()) {
-                player_->modify_health(player_->get_max_health());
                 int choice = UI::show_level_up(*player_);
+                player_->modify_health(player_->get_max_health());
                 player_->level_up(choice);
                 player_->consume_level_up();
             }

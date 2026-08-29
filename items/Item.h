@@ -9,7 +9,7 @@
 class Player;
 
 class Item {
-protected:
+private:
     std::string id_;
     std::string name_;
     char symbol{};
@@ -17,6 +17,9 @@ protected:
     Vec2 item_pos_;
 
     int price_;
+
+    bool is_picked_;
+    bool is_sellable_;
 public:
     Item(std::string  id, std::string  name, char symbol, int price = 0);
     virtual ~Item() = default;
@@ -30,9 +33,16 @@ public:
     int get_price() const;
 
     Vec2& get_item_pos();
-    bool is_picked_;
-    bool is_equipped_;
-    bool is_sellable_;
+
+    bool is_picked() const;
+    bool is_sellable() const;
+    void set_picked(bool value);
+    void set_sellable(bool value);
+
+    // // dodać do pól prywatnych, gettery i setery
+    //
+    // bool is_equipped_; // do usunięcia, w Player dodałem nową metodę do sprawdzania na bazie Equipment
+
 };
 
 

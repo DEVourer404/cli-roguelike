@@ -8,8 +8,9 @@
 
 namespace Renderer {
     void print_game(const Level& current_level, Player& player);
-    void print_player_stats(Player& player);
+    void print_player_stats(const Player& player);
     void print_current_text(const std::string& current_turn_text);
+    void print_death_score(const Player& player, const Level& current_level);
     void clear_screen();
 }
 

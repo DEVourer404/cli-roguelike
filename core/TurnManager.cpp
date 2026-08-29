@@ -73,29 +73,28 @@ void TurnManager::enemy_turn(Enemy &enemy, Player &player, Level &current_level)
 }
 
 bool TurnManager::handle_player_attack(Player &player, Level &current_level, Vec2 new_pos) {
-    if (Enemy *enemy = current_level.enemy_at(new_pos)) {
-        if (resolve_attack(player, *enemy)) {
-            player.add_xp(enemy->get_given_xp());
-        }
+    Enemy *enemy = current_level.enemy_at(new_pos);
+    if (!enemy) return false;
 
-        std::string attack_text = "You attacked a " + enemy->get_name();
+    std::string attack_text;
 
-        std::erase_if(current_level.enemies, [&](const auto &e) {
-            if (!e.isAlive()) {
-                player.modify_gold(10);
-                attack_text = "You killed a " + e.get_name();
-                return true;
-            }
-            return false;
-        });
-
-        Renderer::clear_screen();
-        Renderer::print_game(current_level, player);
-        Renderer::print_current_text(attack_text);
-
-        return true;
+    if (resolve_attack(player, *enemy)) {
+        player.add_xp(enemy->get_given_xp());
+        player.modify_gold(10);
+        attack_text = "You killed a " + enemy->get_name();
+    } else {
+        attack_text = "You attacked a " + enemy->get_name();
     }
-    return false;
+
+    std::erase_if(current_level.enemies, [&](const auto &e) {
+        return !e.isAlive();
+    });
+
+    Renderer::clear_screen();
+    Renderer::print_game(current_level, player);
+    Renderer::print_current_text(attack_text);
+
+    return true;
 }
 
 bool TurnManager::handle_merchant(Player &player, Level &current_level, Vec2 new_pos) {
@@ -116,13 +115,13 @@ bool TurnManager::handle_item_pickup(Player &player, Level &current_level, Vec2 
     bool can_take = true;
     std::string pickup_text;
 
-    if (item->is_sellable_) {
+    if (item->is_sellable()) {
         if (UI::show_buy_item_prompt(*item, player.get_gold())) {
             if (player.get_gold() >= item->get_price()) {
                 if (!player.is_inventory_full()) {
                     player.modify_gold(-item->get_price());
                     pickup_text = "Bought " + item->get_name() + " for " + std::to_string(
-                                                    item->get_price()) + "G!";
+                                      item->get_price()) + "G!";
                 } else {
                     pickup_text = "Inventory is full!";
                     can_take = false;
@@ -144,7 +143,7 @@ bool TurnManager::handle_item_pickup(Player &player, Level &current_level, Vec2 
     }
 
     if (can_take) {
-        item->is_picked_ = true;
+        item->set_picked(true);
         auto it = std::find_if(current_level.items.begin(), current_level.items.end(),
                                [item](const auto &ptr) { return ptr.get() == item; });
         if (it != current_level.items.end()) {
@@ -161,7 +160,7 @@ bool TurnManager::handle_item_pickup(Player &player, Level &current_level, Vec2 
     return can_take;
 }
 
-bool TurnManager::resolve_attack(Entity &attacker, Entity &target) {
+bool TurnManager::resolve_attack(const Entity &attacker, Entity &target) {
     int raw_damage = attacker.get_damage();
 
     // handle dodge chance

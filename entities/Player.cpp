@@ -55,28 +55,18 @@ void Player::use_item(int index) {
 
 void Player::equip_weapon(Weapon* weapon) {
     if (!weapon) return;
-    if (equipment_.weapon == weapon) {
-        weapon->is_equipped_ = false;
+    if (is_equipped(weapon)) {
         equipment_.weapon = nullptr;
     } else {
-        if (equipment_.weapon) {
-            equipment_.weapon->is_equipped_ = false;
-        }
-        weapon->is_equipped_ = true;
         equipment_.weapon = weapon;
     }
 }
 
 void Player::equip_armor(Armor* armor) {
     if (!armor) return;
-    if (equipment_.armor == armor) {
-        armor->is_equipped_ = false;
+    if (is_equipped(armor)) {
         equipment_.armor = nullptr;
     } else {
-        if (equipment_.armor) {
-            equipment_.armor->is_equipped_ = false;
-        }
-        armor->is_equipped_ = true;
         equipment_.armor = armor;
     }
 }
@@ -156,3 +146,6 @@ void Player::modify_gold(int amount)  {
     gold += amount;
 }
 
+bool Player::is_equipped(const Item* item) const {
+    return equipment_.weapon == item || equipment_.armor == item;
+}

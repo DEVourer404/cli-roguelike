@@ -30,12 +30,16 @@ public:
 
     const Map::GameMapType& get_map_grid() const;
 
+    // do pól prywatnych, dodać gettery i settery
     std::vector<Enemy> enemies;
     std::vector<std::unique_ptr<Item>> items;
     RoomType room_type_;
+    //
 
     Enemy* enemy_at(const Vec2& player_pos);
     Item* item_at(const Vec2& player_pos);
+
+    void reset();
 
 };
 
