@@ -35,7 +35,8 @@ private:
     Equipment equipment_;
     int size_;
     std::array<std::unique_ptr<Item>, MAX_INVENTORY_SIZE> inventory_items_;
-    int gold;
+    int gold_;
+    int enemies_killed_ = 0;
 public:
     Player(const std::string& name, char player_symbol);
     Vec2 move_player(Map& game_map, Key k);
@@ -72,6 +73,9 @@ public:
     int get_inventory_size() const;
     bool is_inventory_full() const;
     const std::array<std::unique_ptr<Item>, MAX_INVENTORY_SIZE>& get_inventory_items() const;
+
+    int enemies_killed() const;
+    void enemy_killed();
 };
 
 

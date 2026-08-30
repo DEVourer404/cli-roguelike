@@ -82,6 +82,7 @@ bool TurnManager::handle_player_attack(Player &player, Level &current_level, Vec
         player.add_xp(enemy->get_given_xp());
         player.modify_gold(10);
         attack_text = "You killed a " + enemy->get_name();
+        player.enemy_killed();
     } else {
         attack_text = "You attacked a " + enemy->get_name();
     }

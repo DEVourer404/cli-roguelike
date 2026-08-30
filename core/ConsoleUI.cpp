@@ -20,7 +20,7 @@ namespace Renderer {
                 temp_map[item->get_item_pos().y][item->get_item_pos().x] = item->get_symbol();
         }
 
-        std::cout << current_level.get_level_name() << ": " << current_level.get_level_num() << std::endl;
+        std::cout << current_level.get_level_name() << ": " << current_level.get_level_num() << "\n";
         for (int y = 0; y < Map::HEIGHT; y++) {
             for (int x = 0; x < Map::WIDTH; x++) {
                 std::cout << temp_map[y][x];
@@ -48,6 +48,7 @@ namespace Renderer {
         std::cout << "========================================\n";
 
         std::cout << "You reached " << current_level.get_level_num() << " floor \n";
+        std::cout << "You killed " << player.enemies_killed() << " enemies!\n";
         print_player_stats(player);
         std::cout << "\n";
 
