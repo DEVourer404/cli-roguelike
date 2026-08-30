@@ -164,12 +164,8 @@ bool TurnManager::resolve_attack(const Entity &attacker, Entity &target) {
     int raw_damage = attacker.get_damage();
 
     // handle dodge chance
-    int dodge_chance = target.get_dodge_chance();
-    if (dodge_chance > 0) {
-        int roll = Rng::generate_random_number(1, 100);
-        if (roll <= dodge_chance) {
-            return false;
-        }
+    if (Rng::check_chance(target.get_dodge_chance())) {
+        return false;
     }
 
     // handle armor rate

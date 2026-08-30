@@ -44,8 +44,8 @@ void LevelGenerator::generate_normal_level(Map& game_map, int direction_change_p
     int floorCount = 1;
 
     while ((floorCount*100)/(Map::WIDTH*Map::HEIGHT) < 50) {
-        // momentum - 70% szans na utrzymanie tego same kierunku
-        if(Rng::generate_random_number(1,100) <= direction_change_probability)
+        // momentum - szansa na zmiane kierunku
+        if (Rng::check_chance(direction_change_probability))
             dir = random_direction();
         startX+=dx[dir];
         startY+=dy[dir];
