@@ -9,10 +9,10 @@ void TurnManager::process_turn(Player &player, Level &current_level) {
     Renderer::print_current_text("=== Your turn ===");
     player_turn(player, current_level);
 
-    if (!current_level.enemies.empty())
+    if (!current_level.get_enemies().empty())
         UI::show_wait_for_enter();
 
-    for (auto &enemy: current_level.enemies) {
+    for (auto &enemy: current_level.get_enemies()) {
         Renderer::clear_screen();
         Renderer::print_game(current_level, player);
         Renderer::print_current_text("=== Enemy " + enemy.get_name() + "'s turn ===");
@@ -87,9 +87,7 @@ bool TurnManager::handle_player_attack(Player &player, Level &current_level, Vec
         attack_text = "You attacked a " + enemy->get_name();
     }
 
-    std::erase_if(current_level.enemies, [&](const auto &e) {
-        return !e.isAlive();
-    });
+    current_level.remove_dead_enemies();
 
     Renderer::clear_screen();
     Renderer::print_game(current_level, player);
@@ -144,12 +142,9 @@ bool TurnManager::handle_item_pickup(Player &player, Level &current_level, Vec2 
     }
 
     if (can_take) {
-        item->set_picked(true);
-        auto it = std::find_if(current_level.items.begin(), current_level.items.end(),
-                               [item](const auto &ptr) { return ptr.get() == item; });
-        if (it != current_level.items.end()) {
-            player.add_to_inventory(std::move(*it));
-            current_level.items.erase(it);
+        auto taken_item = current_level.take_item_at(new_pos);
+        if (taken_item) {
+            player.add_to_inventory(std::move(taken_item));
         }
         player.get_entity_pos() = new_pos;
     }

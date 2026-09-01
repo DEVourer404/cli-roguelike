@@ -91,7 +91,7 @@ void Game::run() {
 
         if (!player_->isAlive())
             is_running_ = false;
-        else if (current_level_->enemies.empty())
+        else if (current_level_->get_enemies().empty())
             move_to_new_level();
     }
 
@@ -100,7 +100,7 @@ void Game::run() {
 }
 
 void Game::move_to_new_level() {
-    if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->enemies.empty()) {
+    if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->get_enemies().empty()) {
         if(UI::show_move_to_new_level()) {
             while (player_->has_pending_level_ups()) {
                 int choice = UI::show_level_up(*player_);

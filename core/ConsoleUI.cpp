@@ -9,13 +9,13 @@ namespace Renderer {
         temp_map[player.get_entity_pos().y][player.get_entity_pos().x] = player.get_entity_symbol();
 
         // render enemies
-        for (const auto& enemy: current_level.enemies) {
+        for (const auto& enemy: current_level.get_enemies()) {
             if (enemy.isAlive())
                 temp_map[enemy.get_entity_pos().y][enemy.get_entity_pos().x] = enemy.get_entity_symbol();
         }
 
         // render items
-        for (const auto& item: current_level.items) {
+        for (const auto& item: current_level.get_items()) {
             if (!item->is_picked())
                 temp_map[item->get_item_pos().y][item->get_item_pos().x] = item->get_symbol();
         }

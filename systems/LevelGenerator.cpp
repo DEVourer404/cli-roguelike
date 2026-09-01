@@ -11,7 +11,7 @@ int random_direction() {
 void LevelGenerator::generate(Level& current_level, Player& player,
     const std::vector<Enemy>& enemies_templates, const std::vector<std::unique_ptr<Item>>& items_templates) {
 
-    switch (current_level.room_type_) {
+    switch (current_level.get_room_type()) {
         case RoomType::Normal:
             generate_normal_level(current_level.get_level_map());
             spawn_player(current_level, player);
@@ -22,7 +22,7 @@ void LevelGenerator::generate(Level& current_level, Player& player,
             generate_shop_level(current_level.get_level_map());
             spawn_player(current_level, player);
             place_items(current_level, player.get_entity_pos(), items_templates);
-            for (auto& item : current_level.items) {
+            for (auto& item : current_level.get_items()) {
                 item->set_sellable(true);
             }
             break;
@@ -117,7 +117,7 @@ void LevelGenerator::spawn_enemies(Level& current_level, const Vec2& player_pos,
 
     for (int i = 0; i < 3; ++i) {
         int r = Rng::generate_random_number(0, static_cast<int>(enemies_templates.size()) - 1);
-        current_level.enemies.push_back(enemies_templates[r]);
+        current_level.add_enemy(enemies_templates[r]);
     }
 
     Vec2 temp_pos{0,0};
@@ -126,9 +126,9 @@ void LevelGenerator::spawn_enemies(Level& current_level, const Vec2& player_pos,
 
     size_t enemies_counter = 0;
 
-    while (enemies_counter < current_level.enemies.size()) {
+    while (enemies_counter < current_level.get_enemies().size()) {
         if (current_level.get_level_map().get_tile(temp_pos.x, temp_pos.y) == '.' && temp_pos != player_pos) {
-            current_level.enemies[enemies_counter].get_entity_pos() = temp_pos;
+            current_level.get_enemies()[enemies_counter].get_entity_pos() = temp_pos;
             enemies_counter++;
         }
         temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
@@ -144,7 +144,7 @@ void LevelGenerator::place_items(Level& current_level, const Vec2 &player_pos, c
 
     for (int i = 0; i < 3; ++i) {
         int r = Rng::generate_random_number(0, static_cast<int>(items_templates.size()) - 1);
-        current_level.items.push_back(items_templates[r]->clone());
+        current_level.add_item(items_templates[r]->clone());
     }
 
     temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
@@ -152,9 +152,9 @@ void LevelGenerator::place_items(Level& current_level, const Vec2 &player_pos, c
 
     size_t items_counter = 0;
 
-    while (items_counter < current_level.items.size()) {
+    while (items_counter < current_level.get_items().size()) {
         if (current_level.get_level_map().get_tile(temp_pos.x, temp_pos.y) == '.' && temp_pos != player_pos) {
-            current_level.items[items_counter]->get_item_pos() = temp_pos;
+            current_level.get_items()[items_counter]->get_item_pos() = temp_pos;
             items_counter++;
         }
         temp_pos.x = Rng::generate_random_number(1, Map::WIDTH-2);
