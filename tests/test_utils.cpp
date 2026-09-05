@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "utils/Vec2.h"
 #include "utils/Rng.h"
+#include "core/Logger.h"
 #include <vector>
 
 TEST(Vec2Test, DefaultConstructorInitializesToZero) {
@@ -83,4 +84,25 @@ TEST(RngTest, CheckChanceBoundaryConditions) {
     EXPECT_FALSE(Rng::check_chance(-10));
     EXPECT_TRUE(Rng::check_chance(100));
     EXPECT_TRUE(Rng::check_chance(150));
+}
+
+TEST(LoggerTest, StoresUpToMaxCapacityAndPopsOldestFirst) {
+    Logger::clear();
+
+    for (int i = 1; i <= 5; ++i) {
+        Logger::add_message_to_logger("Message " + std::to_string(i));
+    }
+
+    EXPECT_EQ(Logger::get_logs().size(), 5);
+    EXPECT_EQ(Logger::get_logs().front(), "Message 1");
+    EXPECT_EQ(Logger::get_logs().back(), "Message 5");
+
+    Logger::add_message_to_logger("Message 6");
+
+    EXPECT_EQ(Logger::get_logs().size(), 5);
+    EXPECT_EQ(Logger::get_logs().front(), "Message 2");
+    EXPECT_EQ(Logger::get_logs().back(), "Message 6");
+
+    Logger::clear();
+    EXPECT_TRUE(Logger::get_logs().empty());
 }

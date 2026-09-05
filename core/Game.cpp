@@ -1,6 +1,8 @@
 #include "Game.h"
 #include <limits>
 
+#include "Logger.h"
+
 Game::Game(): is_running_(true) {
     JsonLoader json_loader;
     enemy_templates_ = json_loader.load_enemies();
@@ -84,9 +86,6 @@ void Game::main_menu() {
 
 void Game::run() {
     while (is_running_) {
-        Renderer::clear_screen();
-        Renderer::print_game(*current_level_, *player_);
-
         turn_manager_->process_turn(*player_, *current_level_);
 
         if (!player_->isAlive())
@@ -108,6 +107,7 @@ void Game::move_to_new_level() {
                 player_->level_up(choice);
                 player_->consume_level_up();
             }
+            Logger::clear();
             init_level();
         }
     }

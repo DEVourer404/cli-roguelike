@@ -1,9 +1,11 @@
 #include "ConsoleUI.h"
+
+#include "Logger.h"
 #include "utils/Input.h"
 
 namespace Renderer {
 
-    void print_game(const Level& current_level, Player& player) {
+    void print_game(const Level& current_level, Player& player, const std::string& turn_text) {
         auto temp_map = current_level.get_map_grid();
 
         temp_map[player.get_entity_pos().y][player.get_entity_pos().x] = player.get_entity_symbol();
@@ -20,22 +22,41 @@ namespace Renderer {
                 temp_map[item->get_item_pos().y][item->get_item_pos().x] = item->get_symbol();
         }
 
-        std::cout << current_level.get_level_name() << ": " << current_level.get_level_num() << "\n";
+        std::string current_level_info = std::format("{} {}\n", current_level.get_level_name(), current_level.get_level_num());
+        std::cout << current_level_info;
+
+        std::string map_text;
+        map_text.reserve(Map::HEIGHT * (Map::WIDTH + 1));
+
         for (int y = 0; y < Map::HEIGHT; y++) {
             for (int x = 0; x < Map::WIDTH; x++) {
-                std::cout << temp_map[y][x];
+                map_text.push_back(temp_map[y][x]);
             }
-            std::cout << "\n";
+            map_text.push_back('\n');
         }
+        std::cout << map_text;
+
         print_player_stats(player);
+
+        if (!turn_text.empty()) {
+            std::cout << "\n" << turn_text << "\n";
+        }
+
+        print_logs();
     }
 
     void print_player_stats(const Player& player) {
-        std::cout << "\n";
-        std::cout << "HP: " << player.get_current_health() << "/" << player.get_max_health() << " | ";
-        std::cout << "DMG: " << player.get_damage() << " | ";
-        std::cout << "Lvl: " << player.get_level() << " XP: " << player.get_current_xp() << "/" << player.get_xp_to_next_level() << " | ";
-        std::cout << "Gold: " << player.get_gold() << "\n";
+        std::string player_stats_text = std::format(
+            "\nHP: {}/{} | DMG: {} | Lvl: {} XP: {}/{} | Gold: {}\n",
+            player.get_current_health(),
+            player.get_max_health(),
+            player.get_damage(),
+            player.get_level(),
+            player.get_current_xp(),
+            player.get_xp_to_next_level(),
+            player.get_gold()
+        );
+        std::cout << player_stats_text;
     }
 
     void print_current_text(const std::string& current_turn_text) {
@@ -55,10 +76,21 @@ namespace Renderer {
         UI::show_wait_for_enter();
     }
 
+    void print_logs() {
+        const auto& logs = Logger::get_logs();
+        if (logs.empty()) return;
+
+        std::cout << "----------------------------------------\n";
+        int idx = 1;
+        for (const auto& log: logs) {
+            std::cout << "[Log " << idx++ << "] " << log << "\n";
+        }
+        std::cout << "----------------------------------------\n";
+    }
+
     void clear_screen() {
         std::cout << "\033[2J\033[H";
     }
-
 }
 
 namespace UI {
@@ -264,7 +296,7 @@ namespace UI {
     }
 
     void show_wait_for_enter() {
-        std::cout << "Press ENTER...";
+        std::cout << "\nPress ENTER to continue...";
         while (true) {
             Key key = Terminal::getKey();
             if (key == Key::Enter || key == Key::Space) {

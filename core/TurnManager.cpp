@@ -1,24 +1,32 @@
 #include "TurnManager.h"
 
+#include "Logger.h"
 #include "utils/Rng.h"
 #include "utils/Input.h"
 
 TurnManager::TurnManager() = default;
 
 void TurnManager::process_turn(Player &player, Level &current_level) {
-    Renderer::print_current_text("=== Your turn ===");
+    Renderer::clear_screen();
+    Renderer::print_game(current_level, player, "=== Your turn ===");
     player_turn(player, current_level);
 
-    if (!current_level.get_enemies().empty())
+    if (!player.isAlive()) return;
+
+    Renderer::clear_screen();
+    Renderer::print_game(current_level, player, "=== Your turn ===");
+
+    if (!current_level.get_enemies().empty()) {
         UI::show_wait_for_enter();
+    }
 
     for (auto &enemy: current_level.get_enemies()) {
+        enemy_turn(enemy, player, current_level);
+
         Renderer::clear_screen();
-        Renderer::print_game(current_level, player);
-        Renderer::print_current_text("=== Enemy " + enemy.get_name() + "'s turn ===");
+        Renderer::print_game(current_level, player, "=== " + enemy.get_name() + "'s turn ===");
         UI::show_wait_for_enter();
 
-        enemy_turn(enemy, player, current_level);
         if (!player.isAlive()) return;
     }
 }
@@ -34,8 +42,7 @@ void TurnManager::player_turn(Player &player, Level &current_level) {
                 turn_ended = true;
             } else {
                 Renderer::clear_screen();
-                Renderer::print_game(current_level, player);
-                Renderer::print_current_text("=== Your turn ===");
+                Renderer::print_game(current_level, player, "=== Your turn ===");
             }
         } else if (key == Key::W || key == Key::A || key == Key::S || key == Key::D ||
                    key == Key::Up || key == Key::Left || key == Key::Down || key == Key::Right) {
@@ -51,10 +58,8 @@ void TurnManager::player_turn(Player &player, Level &current_level) {
                 turn_ended = true;
             }
         } else if (key == Key::Space) {
-            Renderer::clear_screen();
-            Renderer::print_game(current_level, player);
-            Renderer::print_current_text("You waited a turn.");
-            turn_ended = true; // spacebar - skip turn
+            Logger::add_message_to_logger("You waited a turn.");
+            turn_ended = true;
         }
     }
 }
@@ -64,9 +69,7 @@ void TurnManager::enemy_turn(Enemy &enemy, Player &player, Level &current_level)
 
     if (new_pos == player.get_entity_pos()) {
         resolve_attack(enemy, player);
-        Renderer::clear_screen();
-        Renderer::print_game(current_level, player);
-        Renderer::print_current_text(enemy.get_name() + " attacked you!");
+        Logger::add_message_to_logger(enemy.get_name() + " attacked you!");
     } else {
         enemy.get_entity_pos() = new_pos;
     }
@@ -88,10 +91,7 @@ bool TurnManager::handle_player_attack(Player &player, Level &current_level, Vec
     }
 
     current_level.remove_dead_enemies();
-
-    Renderer::clear_screen();
-    Renderer::print_game(current_level, player);
-    Renderer::print_current_text(attack_text);
+    Logger::add_message_to_logger(attack_text);
 
     return true;
 }
@@ -99,10 +99,9 @@ bool TurnManager::handle_player_attack(Player &player, Level &current_level, Vec
 bool TurnManager::handle_merchant(Player &player, Level &current_level, Vec2 new_pos) {
     if (current_level.get_level_map().get_tile(new_pos) == 'M') {
         UI::show_merchant_dialogue(player);
+        Logger::add_message_to_logger("Merchant: Safe travels, stranger!");
         Renderer::clear_screen();
-        Renderer::print_game(current_level, player);
-        Renderer::print_current_text("Merchant: Safe travels, stranger!");
-
+        Renderer::print_game(current_level, player, "=== Your turn ===");
         return true;
     }
     return false;
@@ -148,10 +147,9 @@ bool TurnManager::handle_item_pickup(Player &player, Level &current_level, Vec2 
         }
         player.get_entity_pos() = new_pos;
     }
-    Renderer::clear_screen();
-    Renderer::print_game(current_level, player);
+
     if (!pickup_text.empty()) {
-        Renderer::print_current_text(pickup_text);
+        Logger::add_message_to_logger(pickup_text);
     }
     return can_take;
 }

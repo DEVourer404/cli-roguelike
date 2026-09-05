@@ -2,15 +2,17 @@
 #define CONSOLE_UI_H
 
 #include <iostream>
+#include <format>
 #include <string>
 #include "Level.h"
 #include "entities/Player.h"
 
 namespace Renderer {
-    void print_game(const Level& current_level, Player& player);
+    void print_game(const Level& current_level, Player& player, const std::string& turn_text = "");
     void print_player_stats(const Player& player);
     void print_current_text(const std::string& current_turn_text);
     void print_death_score(const Player& player, const Level& current_level);
+    void print_logs();
     void clear_screen();
 }
 

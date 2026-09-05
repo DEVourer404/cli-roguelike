@@ -35,6 +35,7 @@ add_library(CLI_Roguelike_Lib STATIC
         core/ConsoleUI.cpp
         core/Level.cpp
         core/TurnManager.cpp
+        core/Logger.cpp
 
         systems/LevelGenerator.cpp
 
