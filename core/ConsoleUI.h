@@ -12,6 +12,7 @@ namespace Renderer {
     void print_player_stats(const Player& player);
     void print_current_text(const std::string& current_turn_text);
     void print_death_score(const Player& player, const Level& current_level);
+    void print_victory_score(const Player& player);
     void print_logs();
     void clear_screen();
 }

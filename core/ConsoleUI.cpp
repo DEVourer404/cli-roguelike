@@ -76,6 +76,18 @@ namespace Renderer {
         UI::show_wait_for_enter();
     }
 
+    void print_victory_score(const Player& player) {
+        std::cout << "========================================\n";
+        std::cout << "        YOU ESCAPED THE DUNGEON!        \n";
+        std::cout << "========================================\n";
+        std::cout << "You defeated the depths and survived!\n";
+        std::cout << "You killed " << player.enemies_killed() << " enemies!\n";
+        std::cout << "Gold accumulated: " << player.get_gold() << " G\n\n";
+
+        UI::show_wait_for_enter();
+    }
+
+
     void print_logs() {
         const auto& logs = Logger::get_logs();
         if (logs.empty()) return;
@@ -247,11 +259,7 @@ namespace UI {
                 std::cout << "   And don't forget to equip new weapons and\n";
                 std::cout << "   armor from your inventory [I].\"\n";
                 std::cout << "================================================\n";
-                std::cout << "Press ENTER to return...";
-                while (true) {
-                    Key k = Terminal::getKey();
-                    if (k == Key::Enter || k == Key::Space || k == Key::Escape) break;
-                }
+                show_wait_for_enter();
             }
             else if (key == Key::Num2) {
                 Renderer::clear_screen();
@@ -273,12 +281,7 @@ namespace UI {
                     std::cout << "  HP restored to " << player.get_max_health() << "/" << player.get_max_health() << "!\n";
                 }
                 std::cout << "================================================\n";
-                std::cout << "Press ENTER to continue...";
-
-                while (true) {
-                    Key k = Terminal::getKey();
-                    if (k == Key::Enter || k == Key::Space || k == Key::Escape) break;
-                }
+                show_wait_for_enter();
             }
         }
     }
@@ -299,19 +302,21 @@ namespace UI {
         std::cout << "\nPress ENTER to continue...";
         while (true) {
             Key key = Terminal::getKey();
-            if (key == Key::Enter || key == Key::Space) {
+            if (key == Key::Enter || key == Key::Space || key == Key::Escape) {
                 break;
             }
         }
     }
 
     bool show_move_to_new_level() {
-        std::cout << "Press Enter to move to a new level\n";
+        std::cout << "\n========================================\n";
+        std::cout << " [ENTER] Descend to next floor\n";
+        std::cout << " [Any other key] Stay on current floor\n";
+        std::cout << "========================================\n";
+        std::cout << "Choose option: ";
+
         Key key = Terminal::getKey();
-        if (key == Key::Enter)
-            return true;
-        else
-            return false;
+        return (key == Key::Enter);
     }
 
 }

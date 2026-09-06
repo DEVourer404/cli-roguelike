@@ -10,6 +10,7 @@
 #include "systems/LevelGenerator.h"
 #include "TurnManager.h"
 #include "data/JsonLoader.h"
+#include <limits>
 
 class Game {
 public:
@@ -30,6 +31,18 @@ private:
     std::unique_ptr<TurnManager> turn_manager_;
 
     bool is_running_;
+
+    enum class Difficulty
+    {
+        Easy = 5,
+        Medium = 10,
+        Hard = 20,
+        Endless = std::numeric_limits<int>::max()
+    };
+
+    Difficulty difficulty_{Difficulty::Easy};
+
+    static std::string_view difficulty_name(Difficulty difficulty);
 };
 
 

@@ -19,7 +19,8 @@ void Game::main_menu() {
         std::cout << "================================================\n";
         std::cout << "  [1] PLAY GAME\n";
         std::cout << "  [2] CONTROLS & HELP\n";
-        std::cout << "  [3] EXIT\n";
+        std::cout << "  [3] CHOOSE DIFFICULTY | RIGHT NOW: " << difficulty_name(difficulty_) << "\n";
+        std::cout << "  [4] EXIT\n";
         std::cout << "================================================\n";
         std::cout << "Select option: ";
 
@@ -31,6 +32,8 @@ void Game::main_menu() {
                 is_running_ = true;
                 player_ = std::make_unique<Player>("player", 'P');
                 current_level_.reset();
+                Logger::clear();
+
                 init_level();
                 run();
                 break;
@@ -74,6 +77,52 @@ void Game::main_menu() {
                 break;
             }
             case Key::Num3: {
+                bool in_difficulty_menu = true;
+                while (in_difficulty_menu) {
+                    Renderer::clear_screen();
+
+                    std::cout << "================================================\n";
+                    std::cout << "             * SELECT DIFFICULTY *              \n";
+                    std::cout << "================================================\n";
+                    std::cout << "  Current setting: " << difficulty_name(difficulty_) << "\n\n";
+                    std::cout << "  [1] Easy    (5 Floors)\n";
+                    std::cout << "  [2] Medium  (10 Floors)\n";
+                    std::cout << "  [3] Hard    (20 Floors)\n";
+                    std::cout << "  [4] Endless (Infinite Floors)\n\n";
+                    std::cout << "  [Q / ESC] Return to main menu\n";
+                    std::cout << "================================================\n";
+                    std::cout << "Choose option: ";
+
+                    Key diff_key = Terminal::getKey();
+
+                    switch (diff_key) {
+                        case Key::Num1:
+                            difficulty_ = Difficulty::Easy;
+                            in_difficulty_menu = false;
+                            break;
+                        case Key::Num2:
+                            difficulty_ = Difficulty::Medium;
+                            in_difficulty_menu = false;
+                            break;
+                        case Key::Num3:
+                            difficulty_ = Difficulty::Hard;
+                            in_difficulty_menu = false;
+                            break;
+                        case Key::Num4:
+                            difficulty_ = Difficulty::Endless;
+                            in_difficulty_menu = false;
+                            break;
+                        case Key::Q:
+                        case Key::Escape:
+                            in_difficulty_menu = false;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                break;
+            }
+            case Key::Num4: {
                 std::cout << "Thank you for playing!\n";
                 in_menu = false;
                 break;
@@ -88,25 +137,37 @@ void Game::run() {
     while (is_running_) {
         turn_manager_->process_turn(*player_, *current_level_);
 
-        if (!player_->isAlive())
+        if (!player_->isAlive()) {
             is_running_ = false;
+            Renderer::clear_screen();
+            Renderer::print_death_score(*player_, *current_level_);
+        }
         else if (current_level_->get_enemies().empty())
             move_to_new_level();
     }
 
-    Renderer::clear_screen();
-    Renderer::print_death_score(*player_, *current_level_);
+
 }
 
 void Game::move_to_new_level() {
-    if(current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' && current_level_->get_enemies().empty()) {
-        if(UI::show_move_to_new_level()) {
+    if (current_level_->get_level_map().get_tile(player_->get_entity_pos().x, player_->get_entity_pos().y) == '>' &&
+        current_level_->get_enemies().empty()) {
+
+        if (UI::show_move_to_new_level()) {
+            if (current_level_->get_level_num() >= static_cast<int>(difficulty_)) {
+                Renderer::clear_screen();
+                Renderer::print_victory_score(*player_);
+                is_running_ = false;
+                return;
+            }
+
             while (player_->has_pending_level_ups()) {
                 int choice = UI::show_level_up(*player_);
-                player_->modify_health(player_->get_max_health());
                 player_->level_up(choice);
+                player_->modify_health(player_->get_max_health());
                 player_->consume_level_up();
             }
+
             Logger::clear();
             init_level();
         }
@@ -121,3 +182,15 @@ void Game::init_level() {
     turn_manager_ = std::make_unique<TurnManager>();
 }
 
+
+std::string_view Game::difficulty_name(Difficulty difficulty)
+{
+    switch (difficulty)
+    {
+        case Difficulty::Easy:    return "Easy";
+        case Difficulty::Medium:  return "Medium";
+        case Difficulty::Hard:    return "Hard";
+        case Difficulty::Endless: return "Endless";
+    }
+    return "Unknown";
+}
