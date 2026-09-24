@@ -2,55 +2,63 @@
 
 [![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.cppreference.com/w/cpp/20)
 [![CMake](https://img.shields.io/badge/CMake-3.29%2B-064F8C?logo=cmake)](https://cmake.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![C++ CI](https://github.com/DEVourer404/CLI-Roguelike/actions/workflows/ci.yml/badge.svg)](https://github.com/DEVourer404/CLI-Roguelike/actions)
+[![GoogleTest](https://img.shields.io/badge/GoogleTest-v1.15.2-brightgreen.svg)](https://github.com/google/googletest)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)]()
+[![Status](https://img.shields.io/badge/Status-Alpha%20v0.1.0-orange.svg)]()
 
-A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++20) for the terminal. Features clean OOP architecture, smart pointers, zero memory leaks, and a custom cross-platform terminal input and rendering engine.
+A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++20) for the terminal. Features clean object-oriented architecture, comprehensive GoogleTest unit test coverage, and a custom cross-platform terminal input and rendering engine.
 
 ---
 
-## Features
+## 🎮 Features
 
-- **Procedural Generation & Room Types:**
-  - Generates organic, connected caves using a random walk algorithm with directional momentum.
-  - Dedicated **Shop Floors** featuring a friendly Merchant (`M`) and purchaseable items on the floor.
-- **Turn-Based Combat & AI:**
+- **Procedural Generation & Special Floor Types:**
+  - Organic, interconnected cave generation via random walk with directional momentum.
+  - Dedicated **Shop Floors** with an interactive Merchant (`M`) and floor-based item purchasing.
+- **Turn-Based Combat & Enemy AI:**
   - Enemies track the player using a **Breadth-First Search (BFS)** pathfinding algorithm.
-  - Core RPG stats system (Strength, Dexterity, Constitution) affecting damage, dodge chance, and maximum health.
-  - Gold rewards and XP leveling system upon defeating monsters.
+  - RPG progression system: Strength, Dexterity, Constitution affecting damage, dodge chance, and max health.
+  - Experience points, leveling up with stat allocation, and gold rewards on monster defeat.
+- **In-Game Event Logger:**
+  - Boxed FIFO message history displaying the 5 most recent actions (`[Log 1]` - `[Log 5]`).
+  - Real-time logging of combat encounters, dodge rolls, inventory transactions, and dialogs.
 - **Economy & Merchant System:**
-  - **Bump-to-talk:** Interact with the Merchant (`M`) for dungeon advice and full-heal services.
-  - **Bump-to-buy:** Step onto shop floor items to preview prices and purchase with collected Gold.
+  - **Bump-to-talk:** Interact with the Merchant (`M`) for dungeon advice and healing.
+  - **Bump-to-buy:** Step onto items in shops to preview prices and purchase with collected Gold.
 - **Polymorphic Item & Equipment System:**
-  - Weapons, Armor, and Consumables utilizing dynamic polymorphism and the Prototype Pattern (`clone()`).
-  - Fixed-size inventory management (equip, use, drop).
+  - Weapons, Armor, and Consumables utilizing runtime polymorphism and the Prototype Pattern (`clone()`).
+  - 8-slot inventory with item usage, automatic slot shifting, and equipment toggling.
 - **Cross-Platform Terminal Engine:**
-  - Custom I/O abstraction (`Terminal::getKey()`) using POSIX `termios` raw mode for Linux/macOS and console API for Windows.
-  - ANSI escape codes for clean terminal rendering without platform-locked libraries.
+  - Zero third-party GUI dependencies. Custom I/O abstraction (`Terminal::getKey()`) using POSIX `termios` raw mode on Unix and Windows Console API on Windows.
+  - ANSI escape sequences for flicker-free terminal clearing and rendering.
 - **Data-Driven Architecture:**
-  - Enemy templates and item definitions loaded from JSON files via `nlohmann/json` (fetched automatically via CMake `FetchContent`).
+  - Monster stats and item templates loaded dynamically from JSON files via `nlohmann/json`.
 
-## Screenshots
+---
+
+## 📸 Screenshots
 
 <p align="center">
   <img width="632" alt="main_menu" src="https://github.com/user-attachments/assets/fd0d4f30-abda-4ab5-9920-5b0593b398a6" />
-  <br>
-  <em>Main Menu & Navigation</em>
+  <br><em>Main Menu & Navigation</em>
 </p>
 <p align="center">
-   <img width="608" height="662" alt="controls_help" src="https://github.com/user-attachments/assets/035ed547-e43d-4040-90a8-83328fcffde1" />
-  <br>
-  <em>Controls & Help</em>
+  <img width="505" height="561" alt="controls help" src="https://github.com/user-attachments/assets/948d5784-3be5-488f-817c-50a0e06c6673" />
+  <br><em>Controls & Help</em>
 </p>
 <p align="center">
   <img width="480" alt="fight_1" src="https://github.com/user-attachments/assets/13555c69-f1f8-4b71-a821-99afbc9587c4" />
-  <br>
-  <em>Dungeon Exploration & Turn-Based Combat</em>
+  <br><em>Dungeon Exploration & Turn-Based Combat</em>
+</p>
+<p align="center">
+  <img width="487" height="468" alt="merchant" src="https://github.com/user-attachments/assets/8b889a96-6b74-42b1-b60b-d8d9635354fe" />
+  <br><em>Dungeon Merchant level</em>
 </p>
 
 ---
 
-## Controls
+## 🕹️ Controls
 
 | Action | Primary Key | Secondary Key |
 | :--- | :---: | :---: |
@@ -62,27 +70,38 @@ A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++2
 
 ---
 
-## Project Structure
+## 🏗️ Architecture & Engineering Highlights
+
+- **Modern C++20 Idioms:** Standard attributes, `std::format`, `std::unique_ptr` ownership transfer, and strong type safety.
+- **Prototype Pattern:** Deep-cloning item generation using virtual `clone()` methods.
+- **Graph Search Algorithms:** BFS-based pathfinding for tactical enemy movement and obstacle avoidance.
+- **Clean Layered Architecture:** Decoupled simulation loop (`TurnManager`), rendering (`Renderer`), and map state (`Level`).
+- **Comprehensive Unit Testing:** 6 GoogleTest test suites following the strict **AAA (Arrange-Act-Assert)** pattern.
+
+---
+
+## 📂 Project Structure
 
 ```text
-├── core/         # Game loop, level orchestration, turn management (TurnManager), and UI rendering
+├── core/         # Turn loop, Level state, Logger, and Renderer
 ├── entities/     # Entity hierarchy (Player, Enemy, base Entity)
 ├── items/        # Polymorphic item system (Weapon, Armor, Consumable, base Item)
-├── systems/      # Procedural dungeon generation algorithms (LevelGenerator)
-├── data/         # JSON data loader (nlohmann/json)
+├── systems/      # Procedural dungeon generation (LevelGenerator)
+├── data/         # JSON data loaders (JsonLoader)
 ├── utils/        # Vector math (Vec2), RNG utilities, and cross-platform Terminal input
-└── resources/    # enemies.json, items.json game configurations
+├── resources/    # enemies.json, items.json game configurations
+└── tests/        # GoogleTest suite (player, items, enemy BFS, combat, level, utils)
 ```
 
 ---
 
-## Building & Running
+## ⚙️ Building, Running & Testing
 
 ### Requirements
 - C++20 compliant compiler (GCC 11+, Clang 13+, MSVC 2019+)
 - CMake 3.20+
 
-### Build Steps
+### Build
 
 ```bash
 # 1. Clone repository
@@ -92,11 +111,11 @@ cd CLI-Roguelike
 # 2. Configure project
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 
-# 3. Build
+# 3. Compile game & tests
 cmake --build build --config Release
 ```
 
-### Run
+### Run Game
 
 - **Windows:**
   ```powershell
@@ -107,22 +126,22 @@ cmake --build build --config Release
   ./build/CLI_Roguelike
   ```
 
+### Run Unit Tests
+
+All unit tests are registered via CTest and execute across all platforms in CI:
+
+```bash
+ctest --test-dir build -C Release --output-on-failure
+```
+
+Or execute the test runner binary directly:
+- **Windows:** `.\build\Release\CLI_Roguelike_Tests.exe`
+- **Linux / macOS:** `./build/CLI_Roguelike_Tests`
+
 ---
 
-## Code Quality & CI
+## 🛡️ Code Quality & CI
 
-- **Compiler Warnings:** Configured with strict warnings (`-Wall -Wextra -Wpedantic` on GCC/Clang, `/W4` on MSVC) ensuring a 0-warning build.
-- **Continuous Integration:** Multi-platform automated builds on **Ubuntu**, **Windows**, and **macOS** via GitHub Actions.
-
----
-
-## Roadmap / Planned Features
-
-- [ ] **Unit Tests:** Integration of a unit testing framework (Catch2 / GoogleTest) for combat math, procedural generation, and pathfinding.
-- [ ] **Continuous Delivery (CD):** Automated packaging and multi-platform release generation on GitHub Actions for tagged versions.
-- [ ] **Dedicated Terminal / TUI Engine:** Potential migration to a dedicated terminal UI / gamedev library (e.g., FTXUI, PDCurses, or libtcod) for enhanced rendering and advanced color palette support.
-- [ ] **Combat Expansion:** Active skills, status effects (poison, stun), and ranged combat.
-- [ ] **Advanced AI & Fog of War:** Field of View (FOV / shadowcasting) and distinct enemy archetypes (ranged, fleeing, aggressive).
-- [ ] **Content Expansion:** Wider selection of enemy types, weapons, armors, and consumables.
-- [x] **Special Floor Types:** Shopkeeper / merchant levels with item purchasing and healing services.
-- [ ] **Boss Encounters & Shrines:** Boss fights on specific milestone floors and shrine buff interactions.
+- **Strict Warnings:** Compiled with `-Wall -Wextra -Wpedantic` (GCC/Clang) and `/W4` (MSVC) for zero-warning builds.
+- **Continuous Integration:** Multi-platform build and automated test runs on **Ubuntu**, **Windows**, and **macOS** via GitHub Actions.
+- **Memory Safety:** Deterministic resource management using RAII and smart pointers (`std::unique_ptr`).
