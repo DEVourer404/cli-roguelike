@@ -5,7 +5,7 @@
 [![C++ CI](https://github.com/DEVourer404/CLI-Roguelike/actions/workflows/ci.yml/badge.svg)](https://github.com/DEVourer404/CLI-Roguelike/actions)
 [![GoogleTest](https://img.shields.io/badge/GoogleTest-v1.15.2-brightgreen.svg)](https://github.com/google/googletest)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)]()
-[![Status](https://img.shields.io/badge/Status-Alpha%20v0.1.0-orange.svg)]()
+[![Release](https://img.shields.io/badge/Release-Alpha%20v0.1.0-orange.svg)](https://github.com/DEVourer404/CLI-Roguelike/releases)
 
 A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++20) for the terminal. Features clean object-oriented architecture, comprehensive GoogleTest unit test coverage, and a custom cross-platform terminal input and rendering engine.
 
@@ -40,7 +40,7 @@ A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++2
 ## 📸 Screenshots
 
 <p align="center">
-  <img width="632" alt="main_menu" src="https://github.com/user-attachments/assets/fd0d4f30-abda-4ab5-9920-5b0593b398a6" />
+  <img width="451" height="188" alt="main_menu" src="https://github.com/user-attachments/assets/539b6616-c360-4f5c-878c-8360dc3840e7" />
   <br><em>Main Menu & Navigation</em>
 </p>
 <p align="center">
@@ -48,13 +48,26 @@ A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++2
   <br><em>Controls & Help</em>
 </p>
 <p align="center">
-  <img width="480" alt="fight_1" src="https://github.com/user-attachments/assets/13555c69-f1f8-4b71-a821-99afbc9587c4" />
+  <img width="461" height="475" alt="fight" src="https://github.com/user-attachments/assets/a5dc21e4-e4dd-4250-8337-7d36988826d2" />
   <br><em>Dungeon Exploration & Turn-Based Combat</em>
 </p>
 <p align="center">
   <img width="487" height="468" alt="merchant" src="https://github.com/user-attachments/assets/8b889a96-6b74-42b1-b60b-d8d9635354fe" />
   <br><em>Dungeon Merchant level</em>
 </p>
+
+---
+
+## 🚀 Quick Start (Play Now)
+
+You don't need to compile the code from source to try out the game!
+
+1. Download the latest pre-compiled archive from [**Releases**](https://github.com/DEVourer404/CLI-Roguelike/releases).
+2. Extract the `.zip` archive.
+3. Run `CLI_Roguelike.exe` in your terminal.
+
+> [!NOTE]
+> Ensure the `resources/` folder stays in the same directory as `CLI_Roguelike.exe` so the game can load item and enemy data.
 
 ---
 
@@ -95,7 +108,7 @@ A lightweight, turn-based procedural dungeon crawler written in modern C++ (C++2
 
 ---
 
-## ⚙️ Building, Running & Testing
+## ⚙️ Building from Source & Testing
 
 ### Requirements
 - C++20 compliant compiler (GCC 11+, Clang 13+, MSVC 2019+)
@@ -145,3 +158,5 @@ Or execute the test runner binary directly:
 - **Strict Warnings:** Compiled with `-Wall -Wextra -Wpedantic` (GCC/Clang) and `/W4` (MSVC) for zero-warning builds.
 - **Continuous Integration:** Multi-platform build and automated test runs on **Ubuntu**, **Windows**, and **macOS** via GitHub Actions.
 - **Memory Safety:** Deterministic resource management using RAII and smart pointers (`std::unique_ptr`).
+
+
